@@ -1,0 +1,35 @@
+﻿html, body, div, header, footer, nav, section, article, p, ol, ul, li, i, b, u, em, img, dl, dt, dd,
+h1, h2, h3, h4, h5, h6, form, fieldset, legend, input, button, label, textarea, th, td{
+    margin: 2;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+header, nav, section, article, footer, aside, figcaption, figure{
+    display: block;
+}
+h1, h2, h3, h4, h5, h6{
+    font-weight:lighter;
+}
+:focus{
+    outline: 0;
+}
+:link, :visited, a{
+    text-decoration: none;
+}
+ol, ul, li{
+    list-style: none;
+}
+table{
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+input, select, textarea, button, optgroup, option{
+
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+}

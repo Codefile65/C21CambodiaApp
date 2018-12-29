@@ -1,0 +1,6 @@
+@import url(./style1.css);
+.app-header .navbar-nav .dropdown-menu-right {
+  right: auto; }
+
+html body .app.flex-row.align-items-center {
+  height: 100vh; }

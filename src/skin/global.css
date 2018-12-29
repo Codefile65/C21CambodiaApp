@@ -1,0 +1,409 @@
+﻿.pd0 {
+    padding: 0;
+}
+.pd10 {
+    padding: 5px;
+}
+.pt10 {
+    padding-top: 10px;
+}
+.pb10 {
+    padding-bottom: 10px;
+}
+.pt20 {
+    padding-top: 20px;
+}
+.pb20 {
+    padding-bottom: 20px;
+}
+.mr0 {
+    margin-right: 0 !important;
+}
+.mb20 {
+    margin-bottom: 20px !important;
+}
+.mt40 {
+    margin-top: 40px;
+}
+.mb30 {
+    margin-bottom: 30px;
+}
+.mt30 {
+    margin-top: 30px;
+}
+.mt20 {
+    margin-top: 20px;
+}
+.mb10 {
+    margin-bottom: 10px;
+}
+.mt10 {
+    margin-top: 10px;
+}
+.mt12 {
+    margin-top: 12px;
+}
+.mr5 {
+    margin-right: 5px;
+}
+.mr10 {
+    margin-right: 10px;
+}
+.bgcolor {
+    background: #f0f0f0;
+}
+
+
+/* 通用右侧浮动导航 */
+.nav_list {
+	display: none;
+	position: fixed;
+	top: 50%;
+	margin-top: -205px;
+	z-index: 999;
+	height: 410px;
+}
+.nav_list ul li {
+	position: relative;
+	margin-bottom: 10px;
+}
+.nav_list ul li.last {
+	margin-bottom: 0;
+}
+.nav_list ul li a {
+	display: block;
+	width: 50px;
+	height: 50px;
+	
+	text-indent: -99999px;
+}
+.nav_list ul li a.item_hxs {
+	background-position: 0 0;
+}
+.nav_list ul li a.item_service {
+	background-position: 0 -60px;
+}
+.nav_list ul li a:hover.item_service {
+	background-position: -60px -60px;
+}
+.nav_list ul li a.item_qq {
+	background-position: 0 -120px;
+}
+.nav_list ul li a:hover.item_qq {
+	background-position: -60px -120px;
+}
+.nav_list ul li a.item_tel {
+	background-position: 0 -180px;
+}
+.nav_list ul li a:hover.item_tel {
+	background-position: -60px -180px;
+}
+.nav_list ul li a.item_wechat {
+	background-position: 0 -240px;
+}
+.nav_list ul li a:hover.item_wechat {
+	background-position: -60px -240px;
+}
+.nav_list ul li a.item_feedback {
+	background-position: 0 -300px;
+}
+.nav_list ul li a:hover.item_feedback {
+	background-position: -60px -300px;
+}
+.nav_list ul li a.item_top {
+	background-position: 0 -360px;
+}
+.nav_list ul li a:hover.item_top {
+	background-position: -60px -360px;
+}
+.item_show {
+	display: none;
+	position: absolute;
+	top: 0;
+	right:80px;
+	min-height: 50px;
+	background: rgba(229, 0, 17, 0.8);
+	text-align: center;
+}
+
+
+.item_show i.arrows {
+	border-bottom: 5px solid transparent;
+	border-left: 5px solid red;
+	border-top: 5px solid transparent;
+	height: 0;
+	position: absolute;
+	right: -5px;
+	top: 19px;
+	width: 0;
+}
+
+.item_show p {
+	color: #fff;
+}
+.item_show i.arrows {
+	position: absolute;
+	top: 19px;
+	right: -5px;
+*right:-4px;
+	width: 0;
+	height: 0;
+	border-top: 5px solid transparent;
+	border-left: 5px solid red;
+	border-bottom: 5px solid transparent;
+}
+.item_show.service_show, .item_show.tel_show {
+	width: 160px;
+}
+.item_show.wechat_show {
+	padding: 10px;
+}
+.item_show .service_con {
+	line-height: 50px;
+	font-size: 16px;
+}
+.item_show .tel_head {
+	height: 25px;
+	line-height: 25px;
+	font-size: 12px;
+}
+.item_show .tel_con {
+	height: 22px;
+	line-height: 22px;
+	font-size: 22px;
+}
+.item_show .wechat_img {
+	display: block;
+}
+.item_show .wechat_con {
+	white-space: nowrap;
+}
+/* 底部弹框 */
+.foot_popup_up {
+	display: none;
+	position: fixed;
+	bottom: 30px;
+	left: -196px;
+	width: 196px;
+	height: 140px;
+
+	cursor: pointer;
+	z-index: 998;
+}
+.foot_popup_up_small {
+	left: -120px;
+	z-index: 998;
+	width: 120px;
+	height: 86px;
+	
+	cursor: pointer;
+}
+.foot_popup {
+	display: none;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 2147483647;
+	width: 100%;
+	height: 200px;
+}
+.foot_popup_bg {
+	opacity: 1;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1;
+	width: 100%;
+	min-height: 200px;
+
+	background-size: cover;
+}
+.foot_popup_con {
+	position: relative;
+	z-index: 2;
+	margin: 0 auto;
+	width: 1200px;
+	height: 150px;
+	padding-top: 50px;
+	font-size: 15px;
+	color: #fff;
+}
+.foot_popup_img {
+	display: block;
+	float: left;
+	width: 780px;
+	height: 180px;
+}
+.foot_popup_con p {
+	color: #fff;
+}
+.popup_hint {
+	float: left;
+	margin-right: 90px;
+	padding-top: 30px;
+	width: 250px;
+}
+.popup_hint strong {
+	display: block;
+	margin: 2px 0 5px;
+	height: 54px;
+	line-height: 54px;
+	font-size: 35px;
+	font-weight: bold;
+	color: #ffbd4f;
+}
+.popup_hint a {
+	display: block;
+	float: right;
+	width: 145px;
+	height: 34px;
+	text-indent: -9999px;
+	
+}
+.popup_form {
+	float: right;
+	margin-right: 160px;/*padding:0 35px;*/
+	width: 270px;
+	height: 180px;/*background:#1C2837;*/
+}
+.popup_form dt, .popup_form dd {
+	color: #fff;
+	text-align: center;
+}
+.popup_form dt {/*padding-top:5px;*/
+}
+.no_bg_color {
+	color: #f77c00
+}
+.popup_form dt span {
+	color: #ffbd4f;
+}
+.popup_form dd {
+	position: relative;
+	margin-top: 10px;
+	padding: 0 10px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 14px;
+	background: #fff;
+	overflow: hidden;
+}
+.popup_form dd.no_bg {
+	padding: 0;
+	background: none;
+	height: 300px;
+}
+.popup_form dd label, .popup_form dd input {
+	display: block;
+	float: left;
+}
+.popup_form dd label {
+	width: 50px;
+	color: #848484;
+}
+.popup_form dd .text, .popup_form dd .code_text {
+	padding: 0px 0;
+	height: 20px;
+	line-height: 20px;
+}
+.popup_form dd .text {
+	width: 170px;
+	color: #666;
+}
+.popup_form dd .code_box {
+	position: relative;
+	float: left;
+	width: 167px;
+	height: 26px;
+	background: #fff;
+}
+.popup_form dd .code_text {
+	float: left;
+	padding-left: 10px;
+	width: 75px;
+}
+.popup_form dd .code_a {
+	display: block;
+	float: left;
+	margin-top: 4px;
+	width: 77px;
+	height: 18px;
+	line-height: 18px;
+	font-size: 12px;
+	color: #fff;
+	text-align: center;
+	background: #3388FF;
+}
+.popup_form dd .code_btn {
+	float: right;
+	width: 100%;
+	height: 26px;
+	font-size: 16px;
+	color: #beaf87;
+	font-weight: bold;
+	border: 0;
+	background: #ffc700;
+	cursor: pointer;
+	margin-right: 80px;
+    margin: auto;
+}
+.foot_popup_close {
+	position: absolute;
+	right: -1px;
+	width: 35px;
+	height: 35px;
+	text-indent: -9999px;
+	
+	cursor: pointer;
+
+}
+.popup_error {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 26px;
+	line-height: 26px;
+	font-weight: bold;
+	color: red;
+	text-indent: 10px;
+	background: #fff;
+	cursor: default;
+}
+.dhxfu { position: fixed;top: 53px; width:900px;z-index: 98;}
+
+.tui{
+	margin-top: 5px;
+	padding:5px 0;
+}
+.mfth{
+	width:300px;
+	height:30px;
+	float: left;
+    margin-left: 350px;
+    margin-top: 100px;
+	border: 2px solid #F4C403;
+	-moz-border-radius: 3px;      
+    -webkit-border-radius: 3px;   
+    border-radius:3px;
+}
+.mfth input{color:#F4C403;line-height: 30px;height:30px;padding-left:10px;float:left;cursor: pointer;background: #424848}
+.mfth input.text {background:#F4C403;color:#424848;width:160px;}
+.mfth input.code_btn {width:120px;}
+.huodonglist dl dd .hd-title{white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 200px;}
+.graypage{
+	display:none;
+	position: fixed;
+	top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+	z-index: 9000;
+    background-color: #000;
+    opacity: 0.6;
+	}
