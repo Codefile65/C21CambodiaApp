@@ -103,8 +103,8 @@ if (postData ,res) {
 PostData('signup', postData).then((result) => {
  let responseJson = result;
  sessionStorage.setItem("userData1", JSON.stringify(responseJson));
- sessionStorage.setItem('userData', res.name, res.w3.ig);
- sessionStorage.setItem('userData2', res.picture.data.url,);
+ sessionStorage.setItem('userData', res.name|| res.w3.ig);
+ sessionStorage.setItem('userData2', res.picture.data.url|| res.w3.Paa);
  this.setState({redirect: true});
 });
 } else {}
