@@ -104,7 +104,8 @@ PostData('signup', postData).then((result) => {
  let responseJson = result;
  sessionStorage.setItem("userData1", JSON.stringify(responseJson));
  sessionStorage.setItem('userData', res.name|| res.w3.ig);
- sessionStorage.setItem('userData2', res.picture.data.url|| res.w3.Paa);
+ sessionStorage.setItem('userData2', res.name|| res.w3.Paa);
+console.log("userData1", JSON.stringify(responseJson));
  this.setState({redirect: true});
 });
 } else {}
