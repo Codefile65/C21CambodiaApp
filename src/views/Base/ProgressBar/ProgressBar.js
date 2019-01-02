@@ -103,8 +103,8 @@ if (postData ,res) {
 PostData('signup', postData).then((result) => {
  let responseJson = result;
  sessionStorage.setItem("userData1", JSON.stringify(responseJson));
- sessionStorage.setItem('userData', res.name|| res.w3.ig);
- sessionStorage.setItem('userData2', res.name|| res.w3.Paa);
+ sessionStorage.setItem('userData', res.name||res.w3.ig);
+ sessionStorage.setItem('userData2', res.w3.Paa||res.picture.data.url);
 console.log("userData1", JSON.stringify(responseJson));
  this.setState({redirect: true});
 });
@@ -117,7 +117,11 @@ console.log("userData1", JSON.stringify(responseJson));
     if (this.state.redirect || sessionStorage.getItem('userData')||sessionStorage.getItem('userData3')) {
       return (<Redirect to={'/base/paginations'}/>)
   }
-  
+  const responseWechat = (response) => {
+    console.log("Wechat Wechat");
+    console.log(response,'Wechat');
+    this.signup(response, 'Wechat');
+}
   const responseFacebook = (response) => {
       console.log("facebook console");
       console.log(response,'facebook');
@@ -168,11 +172,11 @@ console.log("userData1", JSON.stringify(responseJson));
 		  <div id='wechatLogin'> test</div>
           <WxLogin
   option={{
-    appid: 'wx05114bbd65818e30',
+    appid: 'wx935ec96f85f384b7',
     scope: 'snsapi_login',
     state: 'smartstudy',
     
-    userServiceAPI: 'https://api.smartstudy.com/usert/third/oauth?',
+    userServiceAPI: 'Https://chansela.github.io',
     userServiceParams: {
      
       from: 'pc',
@@ -182,6 +186,7 @@ console.log("userData1", JSON.stringify(responseJson));
       env: 'development',
       accountId: undefined,
     },
+    
     smartRedirect: window.location.host,
   }}
   style={{

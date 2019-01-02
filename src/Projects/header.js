@@ -13,8 +13,14 @@ import { Tabs, Tab, TabPanel, TabList } from 'react-web-tabs';
 import Modal from 'react-awesome-modal'
 import { Button, h1, p, Carousel, CarouselCaption, CarouselControl, CarouselIndicators, CarouselItem, Col, Row } from 'reactstrap';
 //import Drawer from 'react-motion-drawer';
-import image from "../skin/Images/planurahuette.jpg";
+import WxLogin from 'wxlogin.react';
 
+import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
+//import {PostData} from './PostData';
+import {Redirect} from 'react-router-dom';
+import image from "../skin/Images/planurahuette.jpg";
+import nabar from "../skin/Images/nabar.png"
 import "../skin/style2.css";
 import "../skin/reset.css";
 const items = [
@@ -57,12 +63,16 @@ const invertDirection = {
 class Header extends Component {
     constructor(props) {
         super(props);
-      
+        
       }
   state = {
     data: [
      
     ],
+    
+    photo:'',
+    username:'',
+     redirect: false,
     visible : false,
     editIdx: -1,
     columnToSort: "",
@@ -85,6 +95,19 @@ class Header extends Component {
       width: Number(e.target.value) || e.target.value
     });
   };
+  componentDidMount() {
+    let data = sessionStorage.getItem('userData2');
+    let data1 = sessionStorage.getItem('userData');
+     console.log(data);
+     this.setState({photo: data,
+                    username:data1})
+}
+handleLogout(){
+  sessionStorage.removeItem('userData2');
+  sessionStorage.removeItem('userData');
+ 
+  this.setState(this.refs);
+}
 
   setTouch = e => {
     this.setState({
@@ -111,6 +134,29 @@ closeModal() {
     })
   }
   render(){
+    let nabarview=null;
+    if(this.state.photo == null){
+
+    }else{
+      nabarview = <div class="flex-0-0-auto"><a onClick={() =>
+        this.setState({ openLeft: !openLeft, openRight : false })}><img src={nabar} style={{marginTop: "30px",paddingRight:'30px',width:'55px'}}/></a></div>
+
+    }
+   let Login=null; 
+   let Null=null;
+   if(this.state.photo == null){
+    Login = <li class="login">
+    <a href="http://www.shitonghk.com/login">  Login
+   </a><a> | </a><a href="http://www.shitonghk.com/register">Register</a>
+   </li>
+   }else{
+    Login =  <li class="login">
+   <img src={this.state.photo} style={{width:'23px',marginTop:'30px'}} className="img-avatar" alt="admin@bootstrapmaster.com" />
+   <a  href="http://www.shitonghk.com/login">  Wellcome:
+   </a><a> | </a><a href="http://www.shitonghk.com/register">{this.state.username}</a>
+   </li>
+    
+   }
     const {
         drawerStyle: stringDrawerStyle,
         openLeft,
@@ -135,6 +181,7 @@ closeModal() {
          
         <header id="header" >
         <div class="container1 header flex">
+             {nabarview}  
             <div class="flex-0-0-auto"><a href="http://www.shitonghk.com/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Century_21_seal_2018.svg/220px-Century_21_seal_2018.svg.png" style={{marginTop: "10px",width:'60px'}}/></a></div>
             <div class="flex-1-1-0 nav1">
                 <ul>
@@ -148,7 +195,7 @@ closeModal() {
                           </ul>
                     </li>
                     <li><a href="http://www.shitonghk.com/yimin/Global/">News</a></li>
-                    <li class="fire1"><a href="http://www.shitonghk.com/exhibition">Evaluation</a></li>
+                   
                     <li class="fire1"><div class="searchicon searchicon2"><span class="s_span2 fl"  onClick={() => this.openModal()}></span><input type="text" name="search"  onClick={() =>
                       this.setState({ openRight: !openRight, openLeft: false })}></input></div></li>
                   
@@ -160,10 +207,9 @@ closeModal() {
             </div>
             <div class="flex-0-0-auto core">
                 <ul>
-                    <li class="login">
-   <a href="http://www.shitonghk.com/login">login</a><a> | </a><a href="http://www.shitonghk.com/register">Register</a>
-    
-    </li>
+                   
+   {Login} 
+   
     
     <li class="kefuphone">
     <div class="div1">
@@ -197,7 +243,7 @@ closeModal() {
           noTouchOpen={noTouchOpen}
           noTouchClose={noTouchClose}
         >
-          <div style={{ width: "100%" }}>
+          <div style={{  }}>
             
           </div>
           <div style={{ padding: "2em" }}>
@@ -214,7 +260,7 @@ closeModal() {
           noTouchOpen={noTouchOpen}
           noTouchClose={noTouchClose}
         >
-         <div style={{ width: "100%"}}>
+         <div style={{ }}>
            
           </div>
           <div style={{ padding: "2em 2em 0 2em"  }}>
