@@ -1,16 +1,23 @@
 import React, { Component } from "react";
 import Slider from '../slider.js';
 import '../build/horizontal.css';
+import {ToastContainer, ToastStore} from 'react-toasts';
+
 import '../skin/slider-animations.css';
+//import { StickyContainer, Sticky } from 'react-sticky';
+import Sticky from 'react-sticky-el';
 import Drawer from "../lib/drawer.jsx";
+//import Sticky from 'react-sticky-state';
 import '../skin/housedetail.css'
 import "../skin/global.css";
+import ReactDOM from 'react-dom';
 import "../skin/invite.css";
 import "../skin/mini.css";
 import Share from 'social-share-react'
 import '../skin/scss/style.css';
 import Header from './header'
 import Flooter from './flooter'
+import Rightnav from './rightnav';
 import FloaterEvent from './floaterEvent'
 import QRCode from 'qrcode.react'
 //import { ReactSlackChat } from 'react-slack-chat';
@@ -19,8 +26,10 @@ import Modal from 'react-awesome-modal'
 import { Button, h1, p, Carousel, CarouselCaption, CarouselControl, CarouselIndicators, CarouselItem, Col, Row } from 'reactstrap';
 //import Drawer from 'react-motion-drawer';
 import image from "../skin/Images/planurahuette.jpg";
-import ImageGallery from 'react-image-gallery';
-
+import ImageGallery from '../ImageGallery';
+import superagent from 'superagent';
+import ReactPhoneInput from 'react-phone-input-2';
+import imagenotavaiable from "../skin/Images/no_photo_available.gif";
 
 
 import "react-image-gallery/styles/css/image-gallery.css";
@@ -30,16 +39,49 @@ const items = [
     {
         
        
+      image: {imagenotavaiable},
       src: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2.jpg',
       altText: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
       caption: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
     },
     {
+      image: {imagenotavaiable},
       src:'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2.jpg',
       altText: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
       caption: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
     },
     {
+      image: {imagenotavaiable},
+      src:'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2.jpg',
+      altText: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
+      caption: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
+    },
+    {
+      image: {imagenotavaiable},
+      src:'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2.jpg',
+      altText: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
+      caption: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
+    },
+    {
+      image: {imagenotavaiable},
+      src:'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2.jpg',
+      altText: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
+      caption: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
+    },
+    {
+      image: {imagenotavaiable},
+      src:'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2.jpg',
+      altText: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
+      caption: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
+    },
+    {
+      image: {imagenotavaiable},
+      src:'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2.jpg',
+      altText: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
+      caption: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
+    },
+    {
+      image: {imagenotavaiable},
       src:'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2.jpg',
       altText: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
       caption: 'https://www.pioneerpm.com/wp-content/uploads/2014/03/home-banner-2',
@@ -65,9 +107,29 @@ class Detail extends Component {
     data: [
      
     ],
+    id:'',
+    title:'',
+    country:'',
+    email:'',
+    namecontact:'',
+    address1:'',
+    address2:'',
+    start_price:'',
+    end_price:'',
+    avg_annual_rent_from:'',
+    avg_annual_rent_to:'',
+    down_payment:'',
+    project_type:'',
+    description:'',
+    introductions:[],
+    decriptiontap1:'',
+    galleries:[],
+    phone:'',
     visible : false,
     editIdx: -1,
     columnToSort: "",
+    description:'',
+    tap3: 'Tap 3',
     sortDirection: "desc",
     count:10,
     openLeft: false,
@@ -82,12 +144,126 @@ class Detail extends Component {
         noTouchOpen: false,
         noTouchClose: false,
   };
-  setWidth = e => {
+  donetoast(message){
+ToastStore.success(message);
+  }
+  componentWillMount(){
+    let meetupID=this.props.match.params.id;
+    superagent
+      .get(`https://century21api.herokuapp.com/api/project-details?projectID=${meetupID}`)
+    //  .set('Authorization', `Bearer ${this.getAuthenticationToken()}`)
+     // .set('Authorization', `Bearer ${localStorage.getItem('token')}`)
+      //.set('Authorization', 'Bearer perm: {this.getAuthenticationToken})
+      .end((err, res) => {
+        if(err){this.setState({errorMessage: 'Cannot retrieve data form server'}); return;}
+        this.setState({
+       
+          id:res.body.result.id,
+          title:res.body.result.title,
+          country:res.body.result.country,
+          description:res.body.result.description,
+          start_price:res.body.result.start_price,
+          end_price:res.body.result.end_price,
+          avg_annual_rent_from:res.body.result.avg_annual_rent_from,
+          avg_annual_rent_to:res.body.result.avg_annual_rent_to,
+          down_payment:res.body.result.down_payment,
+          project_type:res.body.result.project_type,
+          address1:res.body.result.address_1,
+          address2:res.body.result.address_2,
+          introductions:res.body.result.introductions,
+         // decriptiontap1:res.body.result.introductions.description[0],
+          galleries:res.body.result.galleries,
+      
+       
+        });
+      });
+      window.scrollTo(500, 500);
+      console.log(this.state.galleries)
+  }
+  submit(){
+    superagent
+    .post(`https://century21api.herokuapp.com/api/user-contact`)
+    //     //  .set('Authorization', `Bearer ${this.getAuthenticationToken()}`)
+    //     // .set('Authorization', `Bearer ${localStorage.getItem('token')}`)
+    //     //.set('Authorization', 'Bearer perm: {this.getAuthenticationToken})
+        .send({ project_id: Number(this.props.match.params.id),  name: this.state.namecontact, phone: this.state.phone,email: this.state.email })
+
+        .end((err, res) => {
+           if (err) { this.setState({ errorMessage: 'Cannot retrieve data form server' });  ToastStore.error(" Invalid please check your input  ");return; }
+           this.setState({
+              
+
+            });
+            if (res.status===200){
+              ToastStore.success('Thank! We will contact you later');
+             
+           
+            }
+        });
+  }
+  emailchange = (event) => {
+    this.setState({ email: event.target.value })
+}
+namecontactchange = (event) => {
+    this.setState({ namecontact : event.target.value })
+}
+
+  tophandle(){
+    this.refs.top.scrollIntoView({ behavior: 'smooth'});
+  }
+  handleShow(i) {
+    this.setState({index: i});
+    this.refs[i].scrollIntoView({ behavior: 'smooth'});
+    console.log(i)
+  }
+test(){
+  this.refs.tap2.scrollIntoView();
+}
+  setWidth = e => { 
     this.setState({
       width: Number(e.target.value) || e.target.value
     });
   };
+  rawMarkupdescription(){
+  
+  
+ 
+    var rawMarkup = this.state.description
+    return { __html: rawMarkup };
+ 
+   
+ 
+}
+rawMarkup(){
+  
+  
+ 
+    var rawMarkup = this.state.introductions[0].description
+    return { __html: rawMarkup };
+ 
+   
+ 
+}
+rawMarkup1(){
+  
+  
+ 
+  var rawMarkup = this.state.introductions[1].description
+  return { __html: rawMarkup };
 
+ 
+
+}
+rawMarkup2(){
+  
+  
+ 
+  var rawMarkup = this.state.introductions[2].description
+  return { __html: rawMarkup };
+
+ 
+
+}
   setTouch = e => {
     this.setState({
       [e.target.name]: !e.target.checked
@@ -99,7 +275,14 @@ openModal() {
         visible : true
     });
 }
-
+handleOnChange(value) {
+  this.setState({
+     phone: value
+  });
+}
+phonechange = (value) => {
+  this.setState({ phone : value })
+}
 closeModal() {
     this.setState({
         visible : false
@@ -113,29 +296,37 @@ closeModal() {
     })
   }
     render() {
+      let slice=null;
+      if(this.state.galleries.length === 0){
+        slice =  <ImageGallery items={items} />
+     
+      }else{
+     
+        slice =  <ImageGallery items={this.state.galleries} />
+      }
       const images = [
         {
-          original: 'https://img1.southernliving.timeinc.net/sites/default/files/styles/4_3_horizontal_-_1200x900/public/image/2018/04/main/6401_rusty_ridge_dr_austin_tx-print-001-16-exterior_front-2700x1802-300dpi.jpg?height=50px&width=50px',
+          image: {imagenotavaiable},
           thumbnail: 'https://img1.southernliving.timeinc.net/sites/default/files/styles/4_3_horizontal_-_1200x900/public/image/2018/04/main/6401_rusty_ridge_dr_austin_tx-print-001-16-exterior_front-2700x1802-300dpi.jpg?height=50&width=50',
         },
         {
-          original: 'http://lorempixel.com/1000/600/nature/2/',
+          image: {imagenotavaiable},
           thumbnail: 'http://lorempixel.com/1000/600/nature/2/'
         },
         {
-          original: 'http://lorempixel.com/1000/600/nature/3/',
+          image: {imagenotavaiable},
           thumbnail: 'http://lorempixel.com/250/150/nature/3/'
         },
         {
-          original: 'http://lorempixel.com/1000/600/nature/1/',
+          image: {imagenotavaiable},
           thumbnail: 'http://lorempixel.com/250/150/nature/1/',
         },
         {
-          original: 'http://lorempixel.com/1000/600/nature/2/',
+          image: {imagenotavaiable},
           thumbnail: 'http://lorempixel.com/250/150/nature/2/'
         },
         {
-          original: 'http://lorempixel.com/1000/600/nature/3/',
+          image: {imagenotavaiable},
           thumbnail: 'http://lorempixel.com/1000/600/nature/3/'
         }
       ]
@@ -165,8 +356,9 @@ closeModal() {
           };
       
     return (
+     
         <html>
-        <head>
+        <head >
 
 <script src="script/jquery-1.js"></script>
 <script src="script/jquery.js"></script>
@@ -183,7 +375,7 @@ closeModal() {
 
       
       <div class="clear"></div>
-          <div class="main1" >
+          <div class="main1" ref="top" >
               <div class="banner">
                   <div class="flexslider">
                       <ul class="slides">
@@ -222,7 +414,7 @@ closeModal() {
     
     <div class="position" style={{borderBottom: 'none',marginTottom: '5px'}}>
       <ul>
-        <li>当前位置：<a href="http://www.shitonghk.com/">首页</a>&nbsp;&gt;&nbsp;<a href="http://www.shitonghk.com/au/">东南亚房产</a> &gt; <a href="http://www.shitonghk.com/au/332.html">金边国家中心 sky tree</a></li>
+        <li>.</li>
       </ul>
     </div>
     
@@ -233,7 +425,7 @@ closeModal() {
                   <div class="house_slider"> 
                   <div id="gallery" class="ad-gallery">
                  
-                  <ImageGallery items={images} />
+                {slice}
   
     
   
@@ -244,68 +436,67 @@ closeModal() {
               </div>
             
           <div class="fr nrheadright" style={{marginTop: '-5px'}}>
-              <div class="goods_title color_red">首付：<span class="color_red">
-                  27万人民币起</span>
+              <div class="goods_title color_red">
+                  {this.state.title}
               </div>
                   <div class="goods_fun">
-                      <span class="fun_vs"> <a href="http://www.boc.cn/sourcedb/whpj/" rel="nofollow" target="_blank">人民币汇率</a> </span>
-                      <span class="fun_calculator"> <a target="_self" href="javascript:;" price="97.00" class="list_house_calculator tool_ji jisuanqi">贷款计算器</a> </span>
+                      <span class="fun_vs"> <a href="javascript:" rel="nofollow" >COUNTRY: {this.state.country.toUpperCase()}</a> </span>
+                      <span class="fun_calculator"> <a target="_self" href="javascript:;" price="97.00" class="list_house_calculator tool_ji jisuanqi">PROJECT TYPE: {this.state.project_type.toUpperCase()}</a> </span>
                       <span class="fun_ad">
                                               </span>
                   </div>
-                  <div class="mb10 tui"><span class="tjld"><b class="tzmd">投资卖点：</b>
-                      眺望总理府，金边市政府，大使馆，火车站，大型商场，医院，银行，与中央公园。	          	</span>
-                     
-                    <p class="tjldp"></p>
-                    </div>
-                    <div class="phone_11">400-688-6160<a href="javascript:;" title="客服人员在线,欢迎点击咨询" onclick="javascript:window.open('http://chat56.live800.com/live800/chatClient/chatbox.jsp?companyID=865532&amp;configID=132008&amp;jid=5747855482','','width=880,height=660')">立即咨询</a> </div>
-                    <div class="phone_11 phone_12">
-                        <input name="" class="m_text3" placeholder="请输入您的手机号码"/>
-                         <a href="http://www.shitonghk.com/?kefuonline/" title="客服人员在线,欢迎点击咨询" target="_blank" class="code_btn3">免费通话</a> 
-                    </div>
-                    <Share
-  url='https://www.linkedin.com/'title='分享生活点滴'></Share>
-                    <div class="t3_title mt10">
+                  <div class="mb10 tui"><span class="tjld">Loaction: Address #1: {this.state.address1} OR Address #2: {this.state.address2}	   
+                               	</span>
+                                
+                     </div>
+                      <div class="t3_title mt10">
                    
-                        <div class="t3_title_left"> <b>城市：</b>柬埔寨 金边</div>
-                        <div class="t3_title_left width40"> <b>位置：</b>金边总理府特区地铁旁</div>
-                       
-                                          <div class="t3_title_left width25" title="公寓 "> <b>类型：</b>公寓 </div>
-                       <div class="t3_title_left"> <b>面积：</b>32           			 	-140平方
-                      </div>
-                      <div class="t3_title_left width40"> <b>售价：</b>97        				-172 万人民币
-                      </div>
-                           <div class="t3_title_left width25"> <b>交房期：</b>2018.12</div>
+                      <p class="tjldp"> Avg Annual Rent : <a style={{color:'red'}}>{this.state.avg_annual_rent_from}% - {this.state.avg_annual_rent_to}%</a> </p>
+                                <p class="tjldp"> Down Payment : <a style={{color:'red'}}>{this.state.down_payment}</a> </p>
+                              
                    </div>
+                     <div class="mb10 tui">
+                                
+                                 
+                                </div>
+                                
+                    <div class="phone_11" ><a href="javascript:;" title="客服人员在线,欢迎点击咨询" onclick="">Price</a>{this.state.start_price}$ - {this.state.end_price}$ </div>
+                  
+                    <div class="mb10 tui">
+                                
+                     </div>
+                    <Share
+  url='/${this.state.id}' title='分享生活点滴'></Share>
+                   
   
                  <div class="line_01 mt10 mb10 xunpan">
-                        <div class="xjrs bdsharebuttonbox bdshare-button-style0-32" data-bd-bind="1541294914762"> <span class="color_red" style={{fontWeight: 'normal'}}>免费询盘：</span><span>（询盘人数：</span><span class="color_red">994</span><span>）</span> <a href="javascript:AddFavorite(window.location,document.title)" class="sc">收藏</a><a class="fx bds_more" href="#" data-cmd="more">分享</a></div>
+                        <div class="xjrs bdsharebuttonbox bdshare-button-style0-32" data-bd-bind="1541294914762"> <span class="color_red" style={{fontWeight: 'normal'}}></span><span>Contact us if you faverite this project we will contact you later</span><span class="color_red"></span><span></span> </div>
                         
                         <div class="enquiry">
                           <form class="baogao_form" action="../feedback/feedback_ajax1.php" method="post">
                             <div class="xunpanform">
                               <dl>
-                                <dt class="l-red">*姓名：</dt>
+                                <dt class="l-red">Name：</dt>
                                 <dd>
-                                  <input id="xp_name" class="input_text2" name="pinggu_name" placeholder="您的姓名" type="text"/>
+                                  <input id="xp_name" class="input_text2" name="pinggu_name" placeholder="" type="text" value={this.state.namecontact} onChange={this.namecontactchange.bind(this)}/>
                                 </dd>
                               </dl>
                               <dl>
-                                <dt class="l-red">*手机：</dt>
+                                <dt class="l-red">E-mal：</dt>
                                 <dd>
-                                  <input id="xp_shou" class="input_text2" name="pinggu_shou" placeholder="手机号码" type="text"/>
+                                  <input id="xp_shou" class="input_text2" name="pinggu_shou" placeholder="" type="text" value={this.state.email} onChange={this.emailchange.bind(this)}/>
                                 </dd>
                               </dl>
                               <dl>
-                                <dt class="l-red">邮箱：</dt>
+                                <dt class="l-red">Phone：</dt>
                                 <dd>
-                                  <input id="xp_shou" class="input_text2" name="pinggu_shou" placeholder="邮箱" type="text"/>
+                                <ReactPhoneInput style={{width:'200px'}} defaultCountry={'kh'} value={this.state.phone} onChange={this.phonechange.bind(this)}/>
                                 </dd>
                               </dl>
                               <dl>
                                 <dd>
-                                  <input class="report_xp report" value="立即询盘" type="button"/>
-                                  <span>您的信息我们绝对保密，我们遵循消费者权益！</span>
+                                  <input class="report_xp report" value="Submit" type="button" onClick={this.submit.bind(this)}/>
+                                  
                                 
                                 </dd>
                               </dl>
@@ -315,22 +506,50 @@ closeModal() {
                         </div>
                   </div>
           </div>
-        
-          </div>
          
+          </div>
+          
+         
+        
           <div class="house_detail fl overflow">
               <div class="house_detail_box">
+             
                   <div class="lease_placeholder">
   
-                      <ul class="lease_intro_head">
-                          <li attr_id="xmjs" class="on"> <a target="_self" href="javascript:;">项目介绍</a> </li>
-                          <li attr_id="dlwz" class=""> <a target="_self" href="javascript:;">地理坐标</a> </li>
-                          <li attr_id="touzir" class=""> <a target="_self" href="javascript:;">投资分析</a> </li>
-                          <li attr_id="xmsp"> <a target="_self" href="javascript:;">项目视频</a> </li>
-                          <li attr_id="jiazoushir" class=""> <a target="_self" href="javascript:;">房价走势</a> </li>
-                          <li attr_id="zldownr" class=""> <a class="opendown" target="_self" href="javascript:void(0);">资料下载</a> </li>
-                          <li attr_id="zixunr" class="zixunr"> <a target="_self" href="javascript:;">咨询：400-688-6160</a></li>
-                        </ul>
+          
+                  <Sticky>
+       
+          <header>
+              <ul class="lease_intro_head">
+
+        
+        <li attr_id="xmjs" class="on"> <a target="_self" href="javascript:;" onClick={this.tophandle.bind(this)}>Top</a> </li>
+        {this.state.introductions
+           
+           .map((headers,i)=>{
+             
+return (
+        <li attr_id="touzir" class=""> <a target="_self" href="javascript:;" onClick={this.handleShow.bind(this, i)}>{headers.name}</a> </li>
+      );
+    })}
+       
+       
+        <li attr_id="jiazoushir" class=""> <a target="_self" href="javascript:;">Event</a> </li>
+        <li attr_id="zldownr" class=""> <a class="opendown" target="_self" href="javascript:void(0);">资料下载</a> </li>
+        <li attr_id="zixunr" class="zixunr"> <a target="_self" href="javascript:;">咨询：400-688-6160</a></li>
+      </ul>
+           
+      </header>
+        </Sticky>
+     
+    
+                 
+    
+  
+
+                  
+      
+                     
                      
                         <div id="zldownr" class="closedown"><a href="javascript:void(0);"><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/close.png"/></a></div>
                           <div class="house_zl overflow">
@@ -363,200 +582,48 @@ closeModal() {
                       </div>
                      
                       <div id="xmjs" class="lease_intro_con">
-                        <div class="intro_con_title"> <span>项目介绍</span></div>
+                        <div class="intro_con_title"> <span>Project Information</span></div>
                         <div class="intro_con_item">
   
-                          <p style={{lineHeight: '28px', marginBottom: '17px', color: 'rgb(50, 50, 50)', whiteSpace: 'normal'}}><span style={{fontSize: '16px'}}><strong>项目介绍：金边酒店式公寓，商住两用</strong></span><span style={{display:'none'}}>pc8海外房产网</span></p>
-  <p><span style={{fontSize: '16px'}}><strong>项目位置：金边总理府特区，地铁旁</strong></span><span style={{display:'none'}}>pc8海外房产网</span></p>
-  <p style={{ineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight: 'normal', letterSpacing: 'normal', orphans: '2', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', textAlign: 'left'}}><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0JI1dwfShWa.jpg" dataFormat="JPEG" style={{border: '0px', maxWidth: '100%', margin: '20px 0px', display: 'block'}} alt=""/><span style={{display:'none'}}>pc8海外房产网</span></p>
-  <p style={{ineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight: 'normal', letterSpacing: 'normal', orphans: '2', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', textAlign: 'left'}}><b style={{fontWeight: '700'}}>价值亮点：</b><span style={{display:'none'}}>pc8海外房产网</span></p>
-  <p style={{ineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight: 'normal', letterSpacing: 'normal', orphans: '2', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', textAlign: 'left'}}>1.&nbsp;<b style={{fontWeight: '700'}}><span>送精装修与家电 拎包入住</span></b>；<span style={{display:'none'}}>pc8海外房产网</span></p>
-  <p style={{ineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight: 'normal', letterSpacing: 'normal', orphans: '2', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', textAlign: 'left'}}>2.&nbsp;<b style={{fontWeight: '700'}}><span>五星管理 物业增值；</span></b><span style={{display:'none'}}>pc8海外房产网</span></p>
-  <p style={{ineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight: 'normal', letterSpacing: 'normal', orphans: '2', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', textAlign: 'left'}}>3.&nbsp;<span><b style={{fontWeight: '700'}}>天空树价格优势：金边二环最低价</b><b style={{fontWeight: '700'}}>1700-2000</b><b style={{fontWeight: '700'}}>美元</b><b style={{fontWeight: '700'}}>/</b><b style={{fontWeight: '700'}}>平米；</b></span><span style={{display:'none'}}>pc8海外房产网</span></p>
-  <p style={{ineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight: 'normal', letterSpacing: 'normal', orphans: '2', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', textAlign: 'left'}}>4.<b style={{fontWeight: '700'}}><span>天空树位于金边国际金融中心区旁，从机场到天空树有10公里，车程20分钟。</span></b>眺望总理府，金边市政府，大使馆，火车站，大型商场，医院，银行，与中央公园。<span style={{display:'none'}}>pc8海外房产网</span></p>
-  <p style={{ineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight: 'normal', letterSpacing: 'normal', orphans: '2', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', textAlign: 'left'}}>5.&nbsp;<span><b style={{fontWeight: '700'}}>首付30%，在交付时付余款或申请按揭贷款，接受人民币付款。</b></span><span style={{display:'none'}}>pc8海外房产网</span></p>
-  <p style={{lineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight:' normal', letterSpacing: 'normal', orphans: '2', textAlign: 'justify', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: 'web 0px', textDecorationStyle: 'initial', textDecorationColor: 'initial'}}><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0JI1hXy13Am.jpg" dataFormat="JPEG" style={{border: '0px', maxWidth: '100%', margin: '20px 0px', display: 'block'}} alt=""/><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0JI1hWzOR5E.jpg" dataFormat="JPEG" style={{border: '0px', maxWidth: '100%', margin: '20px 0px', display: 'block'}} alt=""/><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0JI1hXCJ1HM.jpg" dataFormat="JPEG"  style={{border: '0px', maxWidth: '100%', margin: '20px 0px', display: 'block'}} alt=""/><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0JI1hfRGvgW.jpg" dataFormat="JPEG" style={{border: '0px', maxWidth: '100%', margin: '20px 0px', display: 'block'}} alt=""/><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0JI1hfzrg0G.jpg" dataFormat="JPEG" style={{border: '0px', maxWidth: '100%', margin: '20px 0px', display: 'block'}} alt=""/><span style={{display:'none'}}>pc8海外房产网</span></p> </div>
+                          <p style={{lineHeight: '28px', marginBottom: '17px', color: 'rgb(50, 50, 50)', whiteSpace: 'normal'}}><span style={{fontSize: '16px'}}><strong>Description：</strong> <span dangerouslySetInnerHTML={this.rawMarkupdescription()} /></span></p>
+                          <div class="t3_title mt10"> 
+  <p><span style={{fontSize: '16px'}}><strong>Developer：</strong>Honglian Group</span></p>
+  <p><span style={{fontSize: '16px'}}><strong>Property type：</strong>{this.state.project_type}</span></p>
+  <p><span style={{fontSize: '16px'}}><strong>Date of delivery：</strong>2018</span></p>
+  <p><span style={{fontSize: '16px'}}><strong>Year of property ：</strong>2018</span></p>
+  <p><span style={{fontSize: '16px'}}><strong>Plainning area：</strong>77-105 square meters</span></p>
+  <p><span style={{fontSize: '16px'}}><strong>Number of househods:</strong> 12</span></p>
+</div>
+  </div>
                       </div>
                      
   
               
                           <div id="dlwz" class="lease_intro_con">
                               
-                            <div class="intro_con_title"> <span>地理坐标：</span> </div>
-  
-                           <div class="address intro_con_item map_canvas">
-                                             </div>
+                            
   
                           </div>
-                  
-                            <div id="touzir" class="lease_intro_con">
-                                <div class="intro_con_title"> <span>投资分析：</span> </div>
-                                <div class=""> <p style={{lineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight:' normal', letterSpacing: 'normal', orphans: '2', textAlign: 'justify', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: 'web 0px', textDecorationStyle: 'initial', textDecorationColor: 'initial'}}><b style={{fontWeight: '700'}}>投资柬埔寨天空树优势：</b></p>
-  <p style={{lineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight:' normal', letterSpacing: 'normal', orphans: '2', textAlign: 'justify', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: 'web 0px', textDecorationStyle: 'initial', textDecorationColor: 'initial'}}>1.&nbsp;全金边最低价（首都二环）&nbsp;&nbsp;全金边市投报最高&nbsp;</p>
-  <p style={{lineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight:' normal', letterSpacing: 'normal', orphans: '2', textAlign: 'justify', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: 'web 0px', textDecorationStyle: 'initial', textDecorationColor: 'initial'}}>2.&nbsp;规划中的&nbsp;S3&nbsp;地铁出口附近&nbsp;&nbsp;一带一路泛亚铁路附近&nbsp;</p>
-  <p style={{lineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight:' normal', letterSpacing: 'normal', orphans: '2', textAlign: 'justify', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: 'web 0px', textDecorationStyle: 'initial', textDecorationColor: 'initial'}}>3.&nbsp;外国人涌入&nbsp;出租率高&nbsp;</p>
-  <p style={{lineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight:' normal', letterSpacing: 'normal', orphans: '2', textAlign: 'justify', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: 'web 0px', textDecorationStyle: 'initial', textDecorationColor: 'initial'}}>4. 软卡交易&nbsp;无房产交易税&nbsp;</p>
-  <p style={{lineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight:' normal', letterSpacing: 'normal', orphans: '2', textAlign: 'justify', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: 'web 0px', textDecorationStyle: 'initial', textDecorationColor: 'initial'}}>5.&nbsp;五星管理&nbsp;物业增值&nbsp;&nbsp;&nbsp;代租&nbsp;代售&nbsp;代管&nbsp;代修&nbsp;</p>
-  <p style={{lineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight:' normal', letterSpacing: 'normal', orphans: '2', textAlign: 'justify', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: 'web 0px', textDecorationStyle: 'initial', textDecorationColor: 'initial'}}>6.&nbsp;景观地标&nbsp;眺望金边&nbsp;</p>
-  <p style={{lineHeight: '28px', fontSize: '16px', margin: '0px 0px 17px', color: 'rgb(50, 50, 50)',  fontStyle: 'normal', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', fontWeight:' normal', letterSpacing: 'normal', orphans: '2', textAlign: 'justify', textIndent: '0px', textTransform: 'none', whiteSpace: 'normal', widows: '2', wordSpacing: '0px', webkitTextStrokeWidth: 'web 0px', textDecorationStyle: 'initial', textDecorationColor: 'initial'}}><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0JI224awNNY.jpg" dataFormat="JPEG" style={{border: '0px', maxWidth: '100%', margin: '20px 0px', display: 'block'}} alt=""/><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0JI22VZ0MxE.jpg" dataFormat="JPEG" style={{border: '0px', maxWidth: '100%', margin: '20px 0px', display: 'block'}} alt=""/><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0JI22FRLvg8.jpg" dataFormat="JPEG" style={{border: '0px', maxWidth: '100%', margin: '20px 0px', display: 'block'}} alt=""/><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0JI22FmxwcS.jpg" dataFormat="JPEG" style={{border: '0px', maxWidth: '100%', margin: '20px 0px', display: 'block'}} alt=""/><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0JI22R0jM0m.jpg" dataFormat="JPEG" style={{border: '0px', maxWidth: '100%', margin: '20px 0px', display: 'block'}} alt=""/><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0JI22SbeAqm.jpg" dataFormat="JPEG" style={{border: '0px', maxWidth: '100%', margin: '20px 0px', display: 'block'}} alt=""/></p></div>
+                          {this.state.introductions
+                             
+                          .map((headers,i)=>{
+                            
+              return (
+                            <div id="touzir" class="lease_intro_con" ref={i}>
+                                <div class="intro_con_title"> <span>{headers.name}</span> </div>
+                                <div class=""> 
+                                <span dangerouslySetInnerHTML={this.rawMarkup()} />
+                             
+                                </div>
                           </div>    
-  <div class="clear"></div>
-                          <div id="xmsp" class="lease_intro_con" style={{height: '550px'}}>
-                            <div class="intro_con_title"> <span>项目视频：</span> </div>
-                            <div class="intro_con_item">
-                              <div class="contentVideoDiv">
-                                                              <div class="contentVideoDiv"><p class="contentVideoTip">暂无相关视频</p></div>				            </div>
-                            </div>
-                          </div>
-            
+    );
+            })}
+           
                   </div>
               </div>
-              
-              <div class="housebar fr">
-        <div>
-          <div class="ger">
-            <h3>看房团登记</h3>
-            <p>已有<em>24871</em>人在此登记<br/>
-              免费参加看房团，私人订制行程<br/>
-              请登记真实有效的个人资料以备沟通<span class="xuline"></span></p>
-          </div>
-          <div class="gep">
-            <form class="baogao_form" action="../feedback/feedback_ajax1.php" method="post">
-              <table>
-                  <tbody><tr>
-                    <td width="70"><span class="iinput">*姓名：</span></td> <td><input id="pinggu_name" class="input_text" name="pinggu_name" placeholder="您的姓名" type="text"/></td>
-                    </tr>
-                  <tr>
-                    <td width="70"><span class="iinput">*手机：</span></td> <td><input id="pinggu_shou" class="input_text" name="pinggu_shou" placeholder="手机号码" type="text"/></td>
-                    </tr>
-                  <tr>
-                   <td width="70"><span class="iinput">邮箱：</span></td> <td><input id="pinggu_email" class="input_text" name="pinggu_email" placeholder="邮箱" type="text"/></td>
-                  </tr>
-                  <tr>
-                    <td colspan="2"><input class="report_btn" value="立即提交" type="button"/>
-                      <input id="dizi" name="dizi" value="http://www.shitonghk.com/au/332.html" type="hidden"/>
-                      <input name="type" value="14" type="hidden"/>
-                      </td>
-                  </tr>
-              </tbody></table>
-            </form>
-          </div>
-        </div>
-        <script>document.getElementById("dizi").value = window.location.href;</script><div class="rightBarkist overflow huodonglist">
-          <h3> 最新活动 </h3>
-          <dl>
-  
-    <dt><a href="http://www.shitonghk.com/exhibition/4602.html"><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/2b0d2aa5e8e3c2b976f3ecd1e037af16.jpg"/><span>4.14/4.15，北京|上海|南京|成都，雅居乐天汇四地同开团购大会</span></a></dt> 
-      <dd><a class="hd-day" href="http://www.shitonghk.com/exhibition/3377.html"><i>2017.09</i><b>17</b></a> <a class="hd-title" href="http://www.shitonghk.com/exhibition/3377.html">杭州站|柬埔寨房产投资专场峰会—掘金柬埔寨<br/>
-      地址：杭州市下城区长寿路6号杭州城中</a> <a class="hd-yuding" href="http://www.shitonghk.com/exhibition/3377.html" onclick="javascript:window.open('http://chat56.live800.com/live800/chatClient/chatbox.jsp?companyID=865532&amp;configID=132008&amp;jid=5747855482','','width=880,height=660')">席位有限 提前预定</a> </dd> 
-        <dd><a class="hd-day" href="http://www.shitonghk.com/exhibition/3306.html"><i>2017.06</i><b>06</b></a> <a class="hd-title" href="http://www.shitonghk.com/exhibition/3306.html">北京站|中国海外投资CSR国别风险指数发布<br/>
-      地址：清华大学经管学院伟伦楼501室（上午）</a> <a class="hd-yuding" href="http://www.shitonghk.com/exhibition/3306.html" onclick="javascript:window.open('http://chat56.live800.com/live800/chatClient/chatbox.jsp?companyID=865532&amp;configID=132008&amp;jid=5747855482','','width=880,height=660')">席位有限 提前预定</a> </dd> 
-        <dd><a class="hd-day" href="http://www.shitonghk.com/exhibition/3307.html"><i>2017.05</i><b>28</b></a> <a class="hd-title" href="http://www.shitonghk.com/exhibition/3307.html">深圳站|相约睿啟会，遇见财富未来 ——全国巡回海外投<br/>
-      地址：广东深圳</a> <a class="hd-yuding" href="http://www.shitonghk.com/exhibition/3307.html" onclick="javascript:window.open('http://chat56.live800.com/live800/chatClient/chatbox.jsp?companyID=865532&amp;configID=132008&amp;jid=5747855482','','width=880,height=660')">席位有限 提前预定</a> </dd> 
-        <dd><a class="hd-day" href="http://www.shitonghk.com/exhibition/3309.html"><i>2017.05</i><b>25</b></a> <a class="hd-title" href="http://www.shitonghk.com/exhibition/3309.html">上海站|“聚焦“一带一路”下的海外投资<br/>
-      地址：（上海市杨浦区国顺路670号）</a> <a class="hd-yuding" href="http://www.shitonghk.com/exhibition/3309.html" onclick="javascript:window.open('http://chat56.live800.com/live800/chatClient/chatbox.jsp?companyID=865532&amp;configID=132008&amp;jid=5747855482','','width=880,height=660')">席位有限 提前预定</a> </dd> 
-              </dl>
-        </div>
-  
-  <div class="rightBarkist overflow rightBartool">
-          <h3>热门房产</h3>
-          <ul>
-              <li> 
-                  <a href="http://www.shitonghk.com/au/324.html"><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/2234cd84d8e2cc94acfbec4a9779eb81.jpg"/></a>
-                   <a href="http://www.shitonghk.com/au/324.html">金边皇宫区公寓East One</a>
-                   <span>面积：45 - 99平米<br/>
-                    价格：69.00 - 200.00万人民币</span>
-              </li>
-              <li> 
-                  <a href="http://www.shitonghk.com/au/280.html"><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/7d21101f7118a39489fbcee997474c98.jpg"/></a>
-                   <a href="http://www.shitonghk.com/au/280.html">100万买金边“陆家嘴”首选—【钻石双星】</a>
-                   <span>面积：46 - 108平米<br/>
-                    价格：83.00 - 213.00万人民币</span>
-              </li>
-              <li> 
-                  <a href="http://www.shitonghk.com/au/331.html"><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/1419ed967b9e84ce838418ccffaf8283.png"/></a>
-                   <a href="http://www.shitonghk.com/au/331.html">金边·星汇城Star City：10万美金首选项目</a>
-                   <span>面积：51 - 90平米<br/>
-                    价格：64.00 - 110.00万人民币</span>
-              </li>
-              <li> 
-                  <a href="http://www.shitonghk.com/au/335.html"><img src="%E9%87%91%E8%BE%B9%E5%9B%BD%E5%AE%B6%E4%B8%AD%E5%BF%83%20sky%20tree_files/0ec31131d38df93fb41d7e729d7ea332.jpg"/></a>
-                   <a href="http://www.shitonghk.com/au/335.html">富力地产金边首发项目 总投资7亿美金</a>
-                   <span>面积：55 - 134平米<br/>
-                    价格：77.00 - 188.00万人民币</span>
-              </li>
-  
-          </ul>
-  </div>
-  
-        <div class="rightBarkist overflow newlist">
-          <h3> 海外房产 </h3>
-          <ul>
-            <li>  <a href="http://www.shitonghk.com/news/kuaixun/2018-10-31/6242.html">
-              柬埔寨科技创新在蓬勃发展            </a>  <a href="http://www.shitonghk.com/news/kuaixun/2018-10-31/6241.html">
-              马来西亚拍卖1MDB旗下的超级游艇            </a>  <a href="http://www.shitonghk.com/news/kuaixun/2018-10-31/6240.html">
-              泰国最大免税集团合约到期或重新洗牌            </a>  <a href="http://www.shitonghk.com/news/kuaixun/2018-10-31/6234.html">
-              柬埔寨农业迅速发展引塞拉利昂关注            </a>  <a href="http://www.shitonghk.com/news/kuaixun/2018-10-31/6233.html">
-              “物流的Airbnb”能否缓解工业空间危机？            </a>  <a href="http://www.shitonghk.com/news/kuaixun/2018-10-30/6223.html">
-              中国引领外国对希腊房屋的需求复苏            </a>  <a href="http://www.shitonghk.com/news/kuaixun/2018-10-30/6221.html">
-              越南房地产在2018年获得第二高的外国直接投资承诺            </a>  <a href="http://www.shitonghk.com/news/kuaixun/2018-10-30/6215.html">
-              前9个月柬埔寨国公省税收收入大增            </a>  <a href="http://www.shitonghk.com/news/kuaixun/2018-10-30/6214.html">
-              摆脱进口依赖！ 柬埔寨首家轧钢厂明年建成投产            </a>  <a href="http://www.shitonghk.com/news/kuaixun/2018-10-30/6213.html">
-              中国正在买希腊房产            </a> </li>
-          </ul>
-        </div>
-  
-  
-        <div class="rightBarkist overflow newlist">
-          <h3> 政策与攻略 </h3>
-          <ul>
-            <li>  <a href="http://www.shitonghk.com/news/liuxuezixun/2018-10-24/6153.html">
-              世界投资论坛上 洪森总理公布外国投资愿景和战略            </a>  <a href="http://www.shitonghk.com/news/liuxuezixun/2018-10-24/6152.html">
-              金边皇宫打开的“正确姿势” 世通海外            </a>  <a href="http://www.shitonghk.com/news/liuxuezixun/2018-10-23/6137.html">
-              世通海外最新攻略：如何在缅甸拥有一套公寓            </a>  <a href="http://www.shitonghk.com/news/liuxuezixun/2018-10-20/6115.html">
-              周末吃那家？9家正宗高棉餐厅任你选择 世通海外            </a>  <a href="http://www.shitonghk.com/news/liuxuezixun/2018-09-25/5911.html">
-              不止吴哥窟，柬埔寨的新鲜小众的路线玩法            </a>  <a href="http://www.shitonghk.com/news/liuxuezixun/2018-09-21/5885.html">
-              “佛系”青年清单：柬埔寨有哪些佛系景点？            </a>  <a href="http://www.shitonghk.com/news/liuxuezixun/2018-09-19/5853.html">
-              【好玩+人少+便宜+省心】国庆就去柬埔寨            </a>  <a href="http://www.shitonghk.com/news/liuxuezixun/2018-09-13/5776.html">
-              在泰国定居要准备多少钱？世通海外            </a>  <a href="http://www.shitonghk.com/news/liuxuezixun/2018-09-11/5743.html">
-              柬埔寨土地所有权，转让7大步骤 世通海外            </a>  <a href="http://www.shitonghk.com/news/liuxuezixun/2018-09-10/5725.html">
-              柬埔寨证券委员会已批准 2企业准备上市            </a> </li>
-          </ul>
-        </div>
-        <div class="rightBarkist overflow newlist">
-          <h3> 柬埔寨投资 </h3>
-          <ul>
-            <li> <a href="http://www.shitonghk.com/news/huaren/2018-10-31/6239.html">
-              ASA公司将抛售所持爱喜利达银行25%的股份            </a>  <a href="http://www.shitonghk.com/news/huaren/2018-10-31/6238.html">
-              中国国际贸促会温州委员会企业家抵柬考察            </a>  <a href="http://www.shitonghk.com/news/huaren/2018-10-31/6237.html">
-              柬埔寨芒果国外市场前景可观            </a>  <a href="http://www.shitonghk.com/news/huaren/2018-10-31/6236.html">
-              澜湄航空开通暹粒-天津-西哈努克港航线            </a>  <a href="http://www.shitonghk.com/news/huaren/2018-10-31/6235.html">
-              澜湄航空开通暹粒-天津-西哈努克港航线            </a>  <a href="http://www.shitonghk.com/news/huaren/2018-10-31/6232.html">
-              柬埔寨贡布生态度假村的机会            </a>  <a href="http://www.shitonghk.com/news/huaren/2018-10-31/6231.html">
-              柬埔寨物流改革耗资19亿美元            </a>  <a href="http://www.shitonghk.com/news/huaren/2018-10-31/6230.html">
-              柬埔寨呼吁通过工业效率应对气候变化            </a>  <a href="http://www.shitonghk.com/news/huaren/2018-10-31/6229.html">
-              柬埔寨中央银行解释其人民币促销政策            </a>  <a href="http://www.shitonghk.com/news/huaren/2018-10-31/6228.html">
-              塞拉利昂被柬埔寨大米所吸引            </a> </li>
-          </ul>
-        </div>
-        <div class="rightBarkist overflow newlist">
-          <h3> 海外楼盘推荐 </h3>
-          <ul>
-            <li>  <a href="http://www.shitonghk.com/news/aozhoushenghuo/2018-09-27/5938.html">
-              金边顶级人居富力·华府的美好生活即将揭晓            </a>  <a href="http://www.shitonghk.com/news/aozhoushenghuo/2018-09-25/5889.html">
-              小母牛，高棉有机建立柬埔寨有机农业            </a>  <a href="http://www.shitonghk.com/news/aozhoushenghuo/2018-09-25/5888.html">
-              柬埔寨总理：水上出租车，铁路线提高了国民好感度            </a>  <a href="http://www.shitonghk.com/news/aozhoushenghuo/2018-09-10/5729.html">
-              曼谷老牌市中心新盘傲璟·暹罗引发市场“地震”            </a>  <a href="http://www.shitonghk.com/news/aozhoushenghuo/2018-09-01/5618.html">
-              泰国要把曼谷人口翻番，打造超1000万人口的城市            </a>  <a href="http://www.shitonghk.com/news/aozhoushenghuo/2018-09-01/5617.html">
-              柬埔寨内政部申请考察成立两个新省            </a>  <a href="http://www.shitonghk.com/news/aozhoushenghuo/2018-09-01/5616.html">
-              泰国芭提雅Terminal 21 Pattaya,即将开幕的飞机航道百货            </a>  <a href="http://www.shitonghk.com/news/aozhoushenghuo/2018-08-29/5567.html">
-               曼谷The key国际公寓-CBD江景养生公寓            </a>  <a href="http://www.shitonghk.com/news/aozhoushenghuo/2018-08-29/5566.html">
-              星鼎国际丨CBD高回报恒产 金边核心财富综合体            </a>  <a href="http://www.shitonghk.com/news/aozhoushenghuo/2018-08-27/5531.html">
-              暹罗洲际酒店托管+智能科技，尽享曼谷中心商圈顶级豪宅            </a> </li>
-          </ul>
-        </div>
-      </div>
-          
+            
+
+<Rightnav />
       </div>
       
   
@@ -605,12 +672,14 @@ closeModal() {
             </dl>
           </form>
           <span class="foot_popup_close">关闭</span> </div>
+          <ToastContainer position={ToastContainer.POSITION.TOP_RIGHT} store={ToastStore} lightBackground/>
       </div>
       <Flooter/>
      
      </body>
     
     </html>
+   
     );
     
   }

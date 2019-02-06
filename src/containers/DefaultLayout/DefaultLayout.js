@@ -46,10 +46,14 @@ class DefaultLayout extends Component {
                         <route.component {...props} />
                       )} />)
                       : (null);
+                     
                   },
                 )}
-                <Redirect from="/" to="/dashboard" />
+                <Redirect from="/" to="/home" />
+               
+              
               </Switch>
+             
             </Container>
           </main>
           <AppAside fixed hidden>

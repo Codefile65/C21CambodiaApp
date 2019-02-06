@@ -8,6 +8,7 @@ import "../skin/invite.css";
 import "../skin/mini.css";
 import '../skin/scss/style.css';
 import Header from './header'
+import FloatingMenu from './floating'
 import Flooter from './flooter'
 //import { ReactSlackChat } from 'react-slack-chat';
 import { Tabs, Tab, TabPanel, TabList } from 'react-web-tabs';
@@ -15,7 +16,8 @@ import Modal from 'react-awesome-modal'
 import { Button, h1, p, Carousel, CarouselCaption, CarouselControl, CarouselIndicators, CarouselItem, Col, Row } from 'reactstrap';
 //import Drawer from 'react-motion-drawer';
 import image from "../skin/Images/planurahuette.jpg";
-
+import FloatingMenuItem from './floating'
+import superagent from 'superagent';
 import "../skin/style2.css";
 import "../skin/reset.css";
 const items = [
@@ -56,13 +58,26 @@ class home extends Component {
     data: [
      
     ],
+    id:'',
+    name:'',
+    projectalllist:[],
+    nameproject:'',
+    grr:'',
+    countryproject:'',
+    thumbnail:'',
+    start_price:'',
+    end_price:'',
+    project_type:'',
     visible : false,
     editIdx: -1,
     columnToSort: "",
     sortDirection: "desc",
     count:10,
+    typestep:[],
+    
     openLeft: false,
     openRight: false,
+    Getdata:[],
     drawerStyle: `
     {
       "background": "#F9F9F9",
@@ -84,7 +99,54 @@ class home extends Component {
       [e.target.name]: !e.target.checked
     })
   }
-  
+  componentWillMount(){
+    //let meetupID=this.props.match.params.id;
+    superagent
+      .get(`https://century21api.herokuapp.com/api/type-country-project`)
+    //  .set('Authorization', `Bearer ${this.getAuthenticationToken()}`)
+     // .set('Authorization', `Bearer ${localStorage.getItem('token')}`)
+      //.set('Authorization', 'Bearer perm: {this.getAuthenticationToken})
+      .end((err, res) => {
+        if(err){this.setState({errorMessage: 'Cannot retrieve data form server'}); return;}
+        this.setState({Getdata:res.body.result,
+       
+            typestep:res.body.result.types
+       
+        });
+      });
+     
+  }
+  clickme(typetep){
+   
+    this.setState({idselectt: typetep.id
+    });
+    this.projectlist()
+    }
+    Clickcountry(typetep){
+   
+        this.setState({idselectc: typetep.country_id
+        });
+        this.projectlist()
+        }
+  projectlist(){
+    //let meetupID=this.props.match.params.id;
+    
+    superagent
+      .post(`https://century21api.herokuapp.com/api/projects?limit=10&page=1/${this.state.idselectc}`)
+    //  .set('Authorization', `Bearer ${this.getAuthenticationToken()}`)
+     // .set('Authorization', `Bearer ${localStorage.getItem('token')}`)
+      //.set('Authorization', 'Bearer perm: {this.getAuthenticationToken})
+      .send({ country_id:this.state.idselectc, project_type_id: this.stateidselectt })
+      
+      .end((err, res) => {
+        if(err){this.setState({errorMessage: 'Cannot retrieve data form server'}); return;}
+        this.setState({
+            projectalllist:res.body.result
+       
+        });
+      });
+  }
+
 openModal() {
     this.setState({
         visible : true
@@ -104,95 +166,10 @@ closeModal() {
     })
   }
     render() {
-        const blockElements = {
-            content: 'tabs-content',
-            panel: 'tabs-panel',
-            label: 'tabs-title'
-        }
-        const {
-            drawerStyle: stringDrawerStyle,
-            openLeft,
-            openRight,
-            noTouchOpen,
-            noTouchClose
-          } = this.state;
-      
-          let drawerStyle = {}
-          try {
-            drawerStyle = JSON.parse(stringDrawerStyle)
-          } catch (err) {
-            console.error('Error parsing JSON: ', err)
-          }
-      
-          const drawerProps = {
-            overlayColor: "rgba(255,255,255,0.6)",
-            drawerStyle
-          };
-      
-    return (
-        <html>
-        <head>
-
-<script src="script/jquery-1.js"></script>
-<script src="script/jquery.js"></script>
-<script src="script/layer.js"></script>
-
-            <script type="text/javascript" id="lim:component" src="script/component-v5.js"></script>
-
+        const coutrytpanel = this.state.Getdata.map((countrypanelid)=>{
             
-               </head>
-      <body >
-
-            <Header/>
-    
-
-      
-      <div class="clear"></div>
-          <div class="main1" >
-              <div class="banner">
-                  <div class="flexslider">
-                      <ul class="slides">
-              
-      
-                      <Slider autoplay={3000}>
-	{items.map((item, index) => (
-		<div
-			key={index}
-			style={{ background: `url('${item.src}') no-repeat center center` }}
-		>
-               <div className="center">
-							
-						</div>
-		</div>
-	))}
-</Slider>       
-                      </ul>
-                      
-                  <ol class="flex-control-nav flex-control-paging"><li><a class="">1</a></li><li><a class="">2</a></li><li><a class="">3</a></li><li><a class="flex-active">4</a></li></ol><ul class="flex-direction-nav"><li><a class="flex-prev" href="#"></a></li><li><a class="flex-next" href="#"></a></li></ul></div>
-      
-              </div>
-              <section>
-                <Modal visible={this.state.visible} width="400" height="300" effect="fadeInUp" onClickAway={() => this.closeModal()}>
-                    <div>
-                        <h1>Title</h1>
-                        <p>Some Contents</p>
-                        <a href="javascript:void(0);" onClick={() => this.closeModal()}>Close</a>
-                    </div>
-                </Modal>
-            </section>
-              
-          <main1>
-          <Tabs class="hot house "
-        defaultTab="one"
-        onChange={(tabId) => { console.log(tabId) }}
-      >
-      <div >
-        <TabList style={{backgroundColor:'#fafafa', paddingLeft:'100px' ,fontSize:'40px',marginTop:'-0px',lineHeight:'80px'}}>
-          <Tab style={{ backgroundColor:'#fafafa',paddingLeft:'100px',paddingRight:'100px' }} tabFor="one"><h3>CAMBODIA</h3></Tab>
-          <Tab style={{backgroundColor:'#fafafa', paddingLeft:'100px',paddingRight:'100px' }} tabFor="two"><h3>MALAYSIA</h3></Tab>
-          <Tab style={{ backgroundColor:'#fafafa',paddingLeft:'100px',paddingRight:'100px' }} tabFor="three"><h3>DUBAI</h3></Tab>
-        </TabList>
-        <TabPanel tabId="one">
+            return (
+                <TabPanel tabId={countrypanelid.country_id}>
         <div class="container1">
                   
                   <div class="hot house">
@@ -205,28 +182,29 @@ closeModal() {
       >
         <TabList style={{backgroundColor:'transparent', paddingLeft:'250px' ,fontSize:'16px',marginTop:'-0px',lineHeight:'2px'}}>
         <Tab style={{ backgroundColor:'transparent',paddingLeft:'50px',paddingRight:'50px' }} tabFor="All">All</Tab>
+        {countrypanelid.types.map((typetep)=>{
+            
+              return (
+               
+                <Tab style={{ backgroundColor:'transparent',paddingLeft:'50px',paddingRight:'50px' }} tabFor={typetep.type} >{typetep.type.charAt(0).toUpperCase()+typetep.type.slice(1)}</Tab>
           
-          <Tab style={{ backgroundColor:'transparent',paddingLeft:'50px',paddingRight:'50px' }} tabFor="Condo">Condo</Tab>
-          <Tab style={{ backgroundColor:'transparent',paddingLeft:'50px',paddingRight:'50px' }} tabFor="Apartments">Apartments</Tab>
-          <Tab style={{ backgroundColor:'transparent',paddingLeft:'50px',paddingRight:'50px' }} tabFor="Borey">Borey</Tab>
-          <Tab style={{ backgroundColor:'transparent',paddingLeft:'50px',paddingRight:'50px' }} tabFor="Land">Land</Tab>
-      
+              );
+            })}
+          
         </TabList>
         <TabPanel tabId="All">
           <p>Tab All content</p>
         </TabPanel>
-        <TabPanel tabId="Condo">
-          <p>Tab 1 content</p>
-        </TabPanel>
-        <TabPanel tabId="Apartments">
-          <p>Tab 2 content</p>
-        </TabPanel>
-        <TabPanel tabId="Borey">
-          <p>Tab 3 content</p>
-        </TabPanel>
-        <TabPanel tabId="Land">
-          <p>Tab 4 content</p>
-        </TabPanel>
+        {countrypanelid.types.map((headers)=>{
+              return (
+               
+                <TabPanel tabId={headers.id}>
+                <p>Tab 1 content</p>
+              </TabPanel>
+              
+              );
+            })}
+      
       </Tabs>
                       
                       <div style={{display: 'none'}} class="img">
@@ -627,261 +605,24 @@ closeModal() {
                              
                               <div class="clear"></div>
                               <ul class="newsList" style={{display:'block'}}>
-                                                          <li>
-                                    <a href="http://www.shitonghk.com/news/au/201810/6245.html">
-                        <img class="pic fl" src="https://cdnimages.familyhomeplans.com/plans/75977/75977-b1200.jpg"/>
-                                        <div class="index_dsc fr">
-                        <p>逃离吧，新兴市场国家机会在等着我们呢！</p>
-                        <span class="mar-5">特别是连高盛都说：新兴市场的资产开始显现抄底价值。</span>
-                      </div>
-                                    </a>
-                                </li>
-                                                          <li>
-                                    <a href="http://www.shitonghk.com/news/au/201810/6244.html">
-                        <img class="pic fl" src="https://cdnimages.familyhomeplans.com/plans/75977/75977-b1200.jpg"/>
-                                        <div class="index_dsc fr">
-                        <p>中国模式在柬埔寨发展得如何？结果完全让人想不到！</p>
-                        <span class="mar-5">不得不提的还有“一带一路”倡议的示范工程——西哈努克港口经济特区，目前已吸引来自美、日、意、法等国及中国各个行业企业入驻80余家，解决当地就业万余人次，成为柬埔寨境内规模大的经济特区。而随着越来越多的外来人口流入，也必将带动其房产租赁及投资市场的蓬勃发展。</span>
-                      </div>
-                                    </a>
-                                </li>
-                                                          <li>
-                                    <a href="http://www.shitonghk.com/news/au/201810/6243.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                                        <div class="index_dsc fr">
-                        <p>中国企业投资东盟的机会有哪些？</p>
-                        <span class="mar-5">柬埔寨正在致力于提供可靠稳定的电力，并且逐步下调电价，降低成本；改善和提高交通物流水平，降低物流成本</span>
-                      </div>
-                                    </a>
-                                </li>
-                                                          <li>
-                                    <a href="http://www.shitonghk.com/news/au/201810/6226.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                                        <div class="index_dsc fr">
-                        <p>双喜临门，西港2.0来了！</p>
-                        <span class="mar-5">目前是没有重工业，基本都是轻纺织业，有了该项目，未来就有发展其他工业的可能，当然也会用钢企业的降低成本。</span>
-                      </div>
-                                    </a>
-                                </li>
-                                                          <li>
-                                    <a href="http://www.shitonghk.com/news/au/201810/6225.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                                        <div class="index_dsc fr">
-                        <p>中柬多项经济合作助柬埔寨产业升级</p>
-                        <span class="mar-5">为了帮助柬埔寨实现这个目标，黄副主任表示，将鼓励更多的江苏省投资者和企业到西哈努克省投资发展。</span>
-                      </div>
-                                    </a>
-                                </li>
-                                                          <li>
-                                    <a href="http://www.shitonghk.com/news/au/201810/6224.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                                        <div class="index_dsc fr">
-                        <p>柬埔寨的经济特区，金边西港最受欢迎</p>
-                        <span class="mar-5">金边经济特区总面积逾350公顷，分3期发展。最后一期工程约58公顷，正在规划阶段，主要是工厂用地，预计今年开始建设主要的基础设施。
-      
-      </span>
-                      </div>
-                                    </a>
-                                </li>
-                                                          <li>
-                                    <a href="http://www.shitonghk.com/news/au/201810/6222.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                                        <div class="index_dsc fr">
-                        <p>未来三年中国投资可能为西哈努克城房地产带来什么</p>
-                        <span class="mar-5">在此期间，即使镇上的中国人数保持不变，租金也不可能达到今年的峰值。</span>
-                      </div>
-                                    </a>
-                                </li>
-                                                          <li>
-                                    <a href="http://www.shitonghk.com/news/au/201810/6209.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                                        <div class="index_dsc fr">
-                        <p>中日经济交流，除了应对贸易战、金融战，还有一点值得重视</p>
-                        <span class="mar-5">为什么不看好这两年房地产火爆的日本和菲律宾，这两个国家很容易被美国影响。</span>
-                      </div>
-                                    </a>
-                                </li>
-                                                          <li>
-                                    <a href="http://www.shitonghk.com/news/au/201810/6208.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                                        <div class="index_dsc fr">
-                        <p>西港会成为柬埔寨经济的第二“发动机”吗?</p>
-                        <span class="mar-5">随着外国投资商先后到西省投资，该省成为一个具有贸易潜力的省份。</span>
-                      </div>
-                                    </a>
-                                </li>
-                                                          <li>
-                                    <a href="http://www.shitonghk.com/news/au/201810/6207.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                                        <div class="index_dsc fr">
-                        <p>2018年第三季度15个亚洲房地产市场的表现汇总</p>
-                        <span class="mar-5">到泰国规划的大型综合开发项目以及珠江广州至深港高速铁路的开通三角洲地区，亚洲市场出现了稳定的机遇，即使在贸易战下也继续引起关注</span>
-                      </div>
-                                    </a>
-                                </li>
-                                              <li class="bin">
-                    <a href="http://www.shitonghk.com/news/au">查看更多</a>
-                    </li>
-                              </ul>
-                              <ul class="newsList">
-                  
-                                  <li>
-                      <a href="http://www.shitonghk.com/news/liuxuezixun/2018-10-24/6153.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                        <div class="index_dsc fr">
-                          <p>世界投资论坛上 洪森总理公布外国投资愿景和战略</p>
-                          <span class="mar-5">洪森总理在会上向投资者保证，柬埔寨拥有良好的投资环境，希望通过和平，安全，政治和宏观经济稳定以及改善法律和体制框架来实现的更好的投资环境。</span>
-                        </div>
-                      </a>
-                    </li>
-                                  <li>
-                      <a href="http://www.shitonghk.com/news/liuxuezixun/2018-10-24/6152.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                        <div class="index_dsc fr">
-                          <p>金边皇宫打开的“正确姿势” 世通海外</p>
-                          <span class="mar-5">作为一个城市，甚至是国家最具代表性的建筑之一，金边大皇宫就成为了游客必去的景点之一，接下来我们就好好聊聊大皇宫令人为之倾倒的魅力所在吧！
-      
-      </span>
-                        </div>
-                      </a>
-                    </li>
-                                  <li>
-                      <a href="http://www.shitonghk.com/news/liuxuezixun/2018-10-23/6137.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                        <div class="index_dsc fr">
-                          <p>世通海外最新攻略：如何在缅甸拥有一套公寓</p>
-                          <span class="mar-5">现在外国公民可以拥有相应公寓大楼总可售楼面面积的40％。
-      </span>
-                        </div>
-                      </a>
-                    </li>
-                                  <li>
-                      <a href="http://www.shitonghk.com/news/liuxuezixun/2018-10-20/6115.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                        <div class="index_dsc fr">
-                          <p>周末吃那家？9家正宗高棉餐厅任你选择 世通海外</p>
-                          <span class="mar-5">在这里，我们有九家餐厅，提供各种正宗的高棉美食。</span>
-                        </div>
-                      </a>
-                    </li>
-                                  <li>
-                      <a href="http://www.shitonghk.com/news/liuxuezixun/2018-09-25/5911.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                        <div class="index_dsc fr">
-                          <p>不止吴哥窟，柬埔寨的新鲜小众的路线玩法</p>
-                          <span class="mar-5">柏威夏寺是一座古代高棉印度教寺庙，是高棉最具代表性的建筑之一，也是世界文化遗产。</span>
-                        </div>
-                      </a>
-                    </li>
-                                  <li>
-                      <a href="http://www.shitonghk.com/news/liuxuezixun/2018-09-21/5885.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                        <div class="index_dsc fr">
-                          <p>“佛系”青年清单：柬埔寨有哪些佛系景点？</p>
-                          <span class="mar-5">我对佛理不是太懂，但始终保持着敬畏之心。若你是个诚心礼佛的人，请一定要去到这里看一看。</span>
-                        </div>
-                      </a>
-                    </li>
-                                  <li>
-                      <a href="http://www.shitonghk.com/news/liuxuezixun/2018-09-19/5853.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                        <div class="index_dsc fr">
-                          <p>【好玩+人少+便宜+省心】国庆就去柬埔寨</p>
-                          <span class="mar-5">最近发现有个地方，除了是LP评选出的“500个最值得去的地方”高票领先的第一名，更是一个备受外国人喜爱的旅拍胜地！</span>
-                        </div>
-                      </a>
-                    </li>
-                                  <li>
-                      <a href="http://www.shitonghk.com/news/liuxuezixun/2018-09-13/5776.html">
-                        <img class="pic fl" src="https://cdn.houseplans.com/product/q5qkhirat4bcjrr4rpg9fk3q94/w800x533.jpg"/>
-                        <div class="index_dsc fr">
-                          <p>在泰国定居要准备多少钱？世通海外</p>
-                          <span class="mar-5">就拿Lee和Levi’s这两个牌子来说吧，经常都是半价销售，运气好的时候还能用一百块买到国内七八百的衣服，真的是非常划算了。</span>
-                        </div>
-                      </a>
-                    </li>
-                                  <li>
-                      <a href="http://www.shitonghk.com/news/liuxuezixun/2018-09-11/5743.html">
-                        <img class="pic fl" src="https://amp.businessinsider.com/images/5b75a356e199f336008b528b-750-563.jpg"/>
-                        <div class="index_dsc fr">
-                          <p>柬埔寨土地所有权，转让7大步骤 世通海外</p>
-                          <span class="mar-5">这是需要上交给柬埔寨财经部的税。缴纳地点为税务局。在缴纳过后，您会收到一份收据，这是您已经纳税的证明。</span>
-                        </div>
-                      </a>
-                    </li>
-                                  <li>
-                      <a href="http://www.shitonghk.com/news/liuxuezixun/2018-09-10/5725.html">
-                        <img class="pic fl" src="https://amp.businessinsider.com/images/5b75a356e199f336008b528b-750-563.jpg"/>
-                        <div class="index_dsc fr">
-                          <p>柬埔寨证券委员会已批准 2企业准备上市</p>
-                          <span class="mar-5">一旦上述两家企业顺利上市，将能增加我国股市上市企业数目，为投资者提供更多选择，从而提振股市交易量。</span>
-                        </div>
-                      </a>
-                    </li>
-                                  <li class="bin">
-                      <a href="http://www.shitonghk.com/news/liuxuezixun">查看更多</a>
-                     </li>
-                              </ul>
-                              <ul class="newsList">
-                  
-                                                      <li>
-                                  <a href="http://www.shitonghk.com/news/zhengce/2018-07-06/4903.html">
-                      <img class="pic fl" src="https://amp.businessinsider.com/images/5b75a356e199f336008b528b-750-563.jpg"/>
-                                      <div class="index_dsc fr">
-                        <p>100万元人民币买“陆家嘴”地段房产，这房跟白捡一样</p>
-                        <span class="mar-5">关键是谁具有慧眼，能预测到城市未来发展的样子，这也许很难，就如同你也会错过了上海楼市的大牛市一样。</span>
-                      </div>
-                                  </a>
-                              </li>
-                                                        <li>
-                                  <a href="http://www.shitonghk.com/news/zhengce/2018-07-06/4899.html">
-                      <img class="pic fl" src="https://amp.businessinsider.com/images/5b75a356e199f336008b528b-750-563.jpg"/>
-                                      <div class="index_dsc fr">
-                        <p>错过才是最大的损失！看过此文后，至少你不会后悔！</p>
-                        <span class="mar-5">如果不是因为柬埔寨现在穷和弱小，如果不是交通、基建等没有打通，哪有大家的机会去投资？？</span>
-                      </div>
-                                  </a>
-                              </li>
-                                                        <li>
-                                  <a href="http://www.shitonghk.com/news/zhengce/2018-07-06/4896.html">
-                      <img class="pic fl" src="https://amp.businessinsider.com/images/5b75a356e199f336008b528b-750-563.jpg"/>
-                                      <div class="index_dsc fr">
-                        <p>东南亚房产中为什么要投资日新月异的金边房产！</p>
-                        <span class="mar-5">世通海外有香港客户把香港房子抵押给银行，把钱借出来放在柬埔寨商业银行进行套利！</span>
-                      </div>
-                                  </a>
-                              </li>
-                                                        <li>
-                                  <a href="http://www.shitonghk.com/news/zhengce/2018-07-06/4895.html">
-                      <img class="pic fl" src="https://amp.businessinsider.com/images/5b75a356e199f336008b528b-750-563.jpg"/>
-                                      <div class="index_dsc fr">
-                        <p>对比金边和国内几大城市水平，世通海外发现“宝”！</p>
-                        <span class="mar-5">80岁的大妈会讲法语，路边的卖菜阿姨会说英文，突突司机日语中文666，这是金边的常态。</span>
-                      </div>
-                                  </a>
-                              </li>
-                                                        <li>
-                                  <a href="http://www.shitonghk.com/news/zhengce/2018-07-06/4893.html">
-                      <img class="pic fl" src="https://amp.businessinsider.com/images/5b75a356e199f336008b528b-750-563.jpg"/>
-                                      <div class="index_dsc fr">
-                        <p>当18岁的柬埔寨遇到30岁的深圳，莫笑少年穷！</p>
-                        <span class="mar-5">金边，曾经的东方小巴黎，现在东南亚明日之星
-      深圳，今日中国的曼哈顿，曾经中国的小渔村</span>
-                      </div>
-                                  </a>
-                              </li>
-                                                        <li>
-                                  <a href="http://www.shitonghk.com/news/zhengce/2018-07-06/4902.html">
-                      <img class="pic fl" src="https://amp.businessinsider.com/images/5b75a356e199f336008b528b-750-563.jpg"/>
-                                      <div class="index_dsc fr">
-                        <p>为什么金边一区域能汇聚了如此多的豪华高楼大厦？</p>
-                        <span class="mar-5">这是金边的一角，当然，也是金边最贵的一角！</span>
-                      </div>
-                                  </a>
-                              </li>
-                                            <li class="bin">
-                    <a href="http://www.shitonghk.com/news/zhengce">查看更多</a>
-                   </li>
+                              {this.state.projectalllist.map((listprojeect)=>{
+              return (
+               
+                <li key={listprojeect.id}>
+                <a href="http://www.shitonghk.com/news/au/201810/6245.html">
+    <img class="pic fl" src={listprojeect.thumbnail}/>
+                    <div class="index_dsc fr">
+    <p>{listprojeect.name}</p>
+    <span class="mar-5">{listprojeect.grr}</span><br/>
+    <span class="mar-5">{listprojeect.id}</span><br/>
+    
+  </div>
+                </a>
+            </li>
+              );
+            })}
+                                                        
+                                                                                          
                               </ul>
                           </div>
                 
@@ -1178,13 +919,104 @@ closeModal() {
             
                   
               </div>
+       
         </TabPanel>
-        <TabPanel tabId="two">
-          <p>Tab 2 content</p>
-        </TabPanel>
-        <TabPanel tabId="three">
-          <p>Tab 3 content</p>
-        </TabPanel></div>
+            )})
+        const coutrytap = this.state.Getdata.map((countryid)=>{
+            return (
+
+                <a href={`#/${countryid.country_name}/${countryid.country_id}`}> <Tab style={{ backgroundColor:'#fafafa',paddingLeft:'100px',paddingRight:'100px' }} tabFor={countryid.country_id} ><h3>{countryid.country_name.toUpperCase()}</h3></Tab></a>
+         
+            )})
+        const blockElements = {
+            content: 'tabs-content',
+            panel: 'tabs-panel',
+            label: 'tabs-title'
+        }
+        const {
+            drawerStyle: stringDrawerStyle,
+            openLeft,
+            openRight,
+            noTouchOpen,
+            noTouchClose
+          } = this.state;
+      
+          let drawerStyle = {}
+          try {
+            drawerStyle = JSON.parse(stringDrawerStyle)
+          } catch (err) {
+            console.error('Error parsing JSON: ', err)
+          }
+      
+          const drawerProps = {
+            overlayColor: "rgba(255,255,255,0.6)",
+            drawerStyle
+          };
+      
+    return (
+        <html>
+        <head>
+
+<script src="script/jquery-1.js"></script>
+<script src="script/jquery.js"></script>
+<script src="script/layer.js"></script>
+
+            <script type="text/javascript" id="lim:component" src="script/component-v5.js"></script>
+
+            
+               </head>
+      <body >
+
+            <Header/>
+    
+
+      
+      <div class="clear"></div>
+          <div class="main1" >
+              <div class="banner">
+                  <div class="flexslider">
+                      <ul class="slides">
+              
+      
+                      <Slider autoplay={3000}>
+	{items.map((item, index) => (
+		<div
+			key={index}
+			style={{ background: `url('${item.src}') no-repeat center center` }}
+		>
+               <div className="center">
+							
+						</div>
+		</div>
+	))}
+</Slider>       
+                      </ul>
+                      
+                  <ol class="flex-control-nav flex-control-paging"><li><a class="">1</a></li><li><a class="">2</a></li><li><a class="">3</a></li><li><a class="flex-active">4</a></li></ol><ul class="flex-direction-nav"><li><a class="flex-prev" href="#"></a></li><li><a class="flex-next" href="#"></a></li></ul></div>
+      
+              </div>
+              <section>
+                <Modal visible={this.state.visible} width="400" height="300" effect="fadeInUp" onClickAway={() => this.closeModal()}>
+                    <div>
+                        <h1>Title</h1>
+                        <p>Some Contents</p>
+                        <a href="javascript:void(0);" onClick={() => this.closeModal()}>Close</a>
+                    </div>
+                </Modal>
+            </section>
+              
+          <main1>
+          <Tabs class="hot house "
+        defaultTab="1"
+        onChange={(tabId) => { console.log(tabId) }}
+      >
+      <div >
+        <TabList style={{backgroundColor:'#fafafa', paddingLeft:'100px' ,fontSize:'40px',marginTop:'-0px',lineHeight:'80px'}}>
+        {coutrytap}
+          
+               </TabList>
+        {coutrytpanel}
+        </div>
       </Tabs>
       </main1>
       
@@ -1226,11 +1058,13 @@ closeModal() {
           </form>
           <span class="foot_popup_close">关闭</span> </div>
       </div>
+      <FloatingMenuItem/>
       <Flooter/>
      
      </body>
     
     </html>
+    
     );
     
   }

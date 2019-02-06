@@ -74,7 +74,7 @@ for (var i = 0; i < mobileAgent.length; i++) {
 
 
 
-class Header extends Component {
+class HeaderFilter extends Component {
   constructor(props) {
     super(props);
     this.toggleAccordion = this.toggleAccordion.bind(this);
@@ -121,38 +121,7 @@ class Header extends Component {
       width: Number(e.target.value) || e.target.value
     });
   };
-  componentDidMount() {
-    let data = sessionStorage.getItem('userData2');
-    let data1 = sessionStorage.getItem('userData');
-    console.log("test",data);
-    this.setState({
-      photo: data,
-      username: data1
-    })
-  }
-  handleSubmit(e) {
-    sessionStorage.setItem("country_id", this.state.country_id);
-    sessionStorage.setItem("country_name", this.state.country_name);
-    sessionStorage.setItem("end_price", this.state.end_price);
-    sessionStorage.setItem("project_type_id", this.state.project_type_id);
-    sessionStorage.setItem("rent_or_buy", this.state.rent_or_buy);
-    sessionStorage.setItem("room_amount", this.state.room_amount);
-    sessionStorage.setItem("sort", this.state.sort);
-    sessionStorage.setItem("start_price", this.state.start_price);
-    sessionStorage.setItem("title", this.state.title);
-    window.location.href = '#/search'
-  }
- testhandle(){
-  this.props.history.push('/#/app/users');
-  this.setState(this.refs);
- }
-  handleLogout() {
-    sessionStorage.removeItem('userData2');
-    sessionStorage.removeItem('userData');
-
-    this.setState(this.refs);
-  }
-
+  
   setTouch = e => {
     this.setState({
       [e.target.name]: !e.target.checked
@@ -266,9 +235,15 @@ class Header extends Component {
     })
   }
   render() {
-    
+    let google = this.state.projectalllist
+      .filter((typetep, index) => (index < 1))
+      .map((typetep) => {
+
+        return typetep
+
+      })
     let nabarview = null;
-    if (this.state.photo === '') {
+    if (this.state.photo == null) {
 
     } else {
       nabarview = <div class="flex-0-0-auto"><a onClick={() =>
@@ -277,7 +252,7 @@ class Header extends Component {
     }
     let Login = null;
     let Null = null;
-    if (this.state.photo === '') {
+    if (this.state.photo == null) {
       Login = <li class="login">
         <a href="http://www.shitonghk.com/login">  Login
    </a><a> | </a><a href="http://www.shitonghk.com/register">Register</a>
@@ -315,22 +290,21 @@ class Header extends Component {
       <header id="header" >
         <div class="container1 header flex">
           {nabarview}
-          <div class="flex-0-0-auto"><a href="#/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Century_21_seal_2018.svg/220px-Century_21_seal_2018.svg.png" style={{ marginTop: "10px", width: '60px' }} /></a></div>
+          <div class="flex-0-0-auto"><a href="http://www.shitonghk.com/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Century_21_seal_2018.svg/220px-Century_21_seal_2018.svg.png" style={{ marginTop: "10px", width: '60px' }} /></a></div>
           <div class="flex-1-1-0 nav1">
             <ul>
 
 
-              <li class="nav-on"><a href="#/">Home</a></li>
+              <li class="nav-on"><a href="http://www.shitonghk.com/">Home</a></li>
               <li class="fire nav1-li ">
-                <a class="nex-ico" href="javascript:void(0);">Activity</a>
+                <a class="nex-ico" href="#/home">Activity</a>
                 <ul class="">
-                  <li><a href="javascript:void(0);">马来西亚</a><a href="http://www.shitonghk.com/au-1-0-1467-0-0-0-0-0-0-0-0-0-0-0-0-0-0.html">泰国</a><a href="http://www.shitonghk.com/au-1-0-1468-0-0-0-0-0-0-0-0-0-0-0-0-0-0.html">柬埔寨 </a></li>
+                  <li><a href="http://www.shitonghk.com/au-1-0-1466-0-0-0-0-0-0-0-0-0-0-0-0-0-0.html">马来西亚</a><a href="http://www.shitonghk.com/au-1-0-1467-0-0-0-0-0-0-0-0-0-0-0-0-0-0.html">泰国</a><a href="http://www.shitonghk.com/au-1-0-1468-0-0-0-0-0-0-0-0-0-0-0-0-0-0.html">柬埔寨 </a></li>
                 </ul>
               </li>
-              <li><a href="javascript:void(0);">News</a></li>
+              <li><a href="http://www.shitonghk.com/yimin/Global/">News</a></li>
 
-              <li class="fire1"><div class="searchicon searchicon2"><span class="s_span2 fl" onClick={() => this.openModal()}></span><input type="text" name="search" onClick={() => this.toggleAccordion(1)} value={this.state.title} onChange={this.searchTitl.bind(this)}></input></div></li>
-
+            
             </ul>
 
 
@@ -365,89 +339,7 @@ class Header extends Component {
 
         </div>
         <Collapse isOpen={this.state.accordion[1]} data-parent="#accordion" id="collapseTwo">
-          <CardBody>
-            <div class="vip-dingzhi clear overflow mb20">
-              <dl>
-                <dt class="vip-title">没有相中合适的项目，就来量身定制吧！</dt>
-              </dl>
-              <dl class="xuqiu-liu">
-                <dd>Region</dd>
-
-                <dd>Categories</dd>
-                <dd>Type</dd>
-                <dd>Room</dd>
-                <dd>Short</dd>
-                <dd></dd>
-              </dl>
-
-              <dl class="vip-select">
-
-                <select id="Region" value={this.state.country_id} onChange={this.countrychange.bind(this)}>
-                 
-                  <option value="0" style={{ Color: '#fff' }} >Region ...</option>
-                  {this.state.projectalllist.map((typetep) => {
-
-                    return (
-                      <option value={typetep.country_id}>{typetep.country_name}</option>
-                    );
-                  })}
-                </select>
-
-                <select id="Categories" value={this.state.project_type_id} onChange={this.projecttypeidchange.bind(this)}>
-                  <option value="0">Categories ...</option>
-
-                  {this.state.option_types.map((type) => {
-
-                    return (
-                      <option value={type.id}>{type.type}</option>
-                    );
-                  })}
-
-                </select>
-
-                <select id="Type" value={this.state.rent_or_buy} onChange={this.rentorbuychange.bind(this)}>
-                  <option value=" ">Type ...</option>
-                  <option value="Rent">Rent</option>
-                  <option value="Buy">Buy</option>
-
-                </select>
-                <select id="Room" value={this.state.room_amount} onChange={this.roomchange.bind(this)}>
-                  <option value="">Room ...</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="else">Else</option>
-                </select>
-                <select id="Short" value={this.state.sort} onChange={this.shortchange.bind(this)}>
-                  <option value="">Short ...</option>
-
-                  <option value="phtl">Price high to low</option>
-                  <option value="plth">Price low to high</option>
-                  <option value="grr">GRR</option>
-
-                </select>
-                <span>√（Required）</span>
-              </dl>
-
-
-              <dl class="vip-xuqiu">
-                <dt>
-                 <button class="tj-xuqiu" type="submit" onClick={this.handleSubmit.bind(this)} >Search</button>
-                </dt>
-                <dd>
-                  <input class="vip-name" name="" id="" placeholder="必填" size="" value={this.state.start_price} onChange={this.startpricechange.bind(this)} />
-                </dd>
-                <dd>
-                  <input class="vip-tel" name="" id="" placeholder="必填" size="" value={this.state.end_price} onChange={this.endpricechange.bind(this)} />
-                </dd>
-                <dd>
-                  <textarea class="vip-text" name="" id="" ></textarea>
-                </dd>
-              </dl>
-            </div>
-          </CardBody>
+         
         </Collapse>
 
         {!openRight &&
@@ -576,4 +468,4 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default HeaderFilter;

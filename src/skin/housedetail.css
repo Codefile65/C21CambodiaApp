@@ -57,7 +57,7 @@
 .goods_fun{padding-top:10px;overflow:hidden;}
 .goods_fun span{display:inline-block;height:26px;line-height:26px; font-size:16px;}
 .goods_fun .fun_vs{
-	float:left;padding-left:25px;
+	float:left;padding-left:0px;
 height:34px;
 	/*background:url(../images/icon_20.png) no-repeat left center;*/
 	background:url() no-repeat left bottom;
@@ -84,7 +84,7 @@ height:34px;
 	height:34px;
 }
 .phone_11{background:#eee url() no-repeat 0 0; width:100%; height:48px; text-align:center; font-size:26px; font-weight:bold; line-height:47px; color:#06F;}
-.phone_11 a { display:block; width:120px; background:#beaf87; font-size:18px; color:#fff; text-align:center; line-height:48px; font-weight:normal; float:right;border-radius: 0 5px 5px 0;}
+.phone_11 a { display:block; width:120px; background:#beaf87; font-size:18px; color:#fff; text-align:center; line-height:48px; font-weight:normal; float:left;border-radius: 5px 0px 0px 5px;}
 .phone_12 { margin-top:10px; background:#fff url() no-repeat; position:relative;}
 .phone_12 input {
     height:36px;
@@ -133,7 +133,7 @@ height:34px;
 .xunpanform .l-red { line-height:35px;}
 .enquiry .report_btn { margin-left:65px; margin-top:0; display:block; border-radius: 4px; }
 .enquiry .report { margin-left:65px; margin-top:0; display:block; border-radius: 4px; }
-.enquiry span { display:block; position:absolute; bottom:13px; left:200px; font-size:12px; color:#999; line-height:30px;}
+.enquiry span { bottom:13px; left:200px; font-size:14px; ; line-height:30px;}
 .enquiry .wx-lx { position:absolute; top:0px; right:30px;}
 .inputtxt input{width:40%; border:1px solid #ccc; height:34px; _line-height:34px; *line-height:34px; text-indent:24px; font-size:14px; float:left; margin-right:5%;}
 .inputtxt input.on{border:1px solid #beaf87;}
@@ -778,7 +778,7 @@ em{
 .huodonglist dl dd { width:283px; height:75px;  margin:5px; overflow:hidden;}
 .huodonglist dl dd a { display:block; float:left; text-align:center;}
 .huodonglist dl dd .hd-day { width:65px; height:65px; border-radius:10px; -webkit-border-radius: 10px;; border-radius:10px;; background:#777; color:#fff; font-size:14px; margin-right:10px;}
-.huodonglist dl dd .hd-day b { display:block; height:45px; width:65px; background:#beaf87; -moz-border-radius: 0px 0px 10px 10px;; -webkit-border-radius: 0px 0px 10px 10px;; border-radius:0px 0px 10px 10px;; line-height:45px; font-size:40px; }
+.huodonglist dl dd .hd-day b { display:block; height:45px; width:65px; background:#beaf87; -moz-border-radius: 0px 0px 10px 10px;; -webkit-border-radius: 0px 0px 10px 10px;; border-radius:0px 0px 10px 10px;; line-height:45px; font-size:14px; }
 .huodonglist dl dd .hd-title { font-size:12px; line-height:20px; margin-top:5px;}
 .huodonglist dl dd .hd-yuding { font-size:12px; line-height:20px; color:#f60; width:180px; font-weight:bold;}
 .huodonglist dl dd .hd-yuding:hover { color:#09f;}
@@ -802,7 +802,7 @@ em{
 	font-size:12px;
 }
 .baogao_form .input_text2{
-	height: 25px;
+	height: 34px;
 	width: 200px; border: 1px solid rgb(211, 211, 211);
 	font-size:14px;
 	line-height:25px;
@@ -927,25 +927,25 @@ em{
 }
 #allmap{width:100%;height:500px;}
 .fline { width:1200px; margin:25px auto 15px auto; border-bottom:1px #aaa solid;}
-.vip-dingzhi { border:1px #beaf87 solid; background:#fff url() left top no-repeat; overflow:hidden; padding:10px 110px;}
+.vip-dingzhi { border:1px #beaf87 solid; background:#fafafa url() left top no-repeat; overflow:hidden; padding:10px 110px;}
 .vip-dingzhi dl { width:100%; }
 .vip-dingzhi .vip-title { font-size:20px;line-height:30px;font-weight:bold;color:#beaf87; text-align:center;}
 .vip-dingzhi .xuqiu-liu { border:1px #beaf87 solid; overflow:hidden; margin-top:10px;}
 .vip-dingzhi .xuqiu-liu dt,.vip-dingzhi .xuqiu-liu dd { float:left; height:56px; }
 .vip-dingzhi .xuqiu-liu dt { margin-right:15px;}
-.vip-dingzhi .xuqiu-liu dd { font-size:14px;line-height:56px; color:#333; text-align:center; padding:0 45px 0 15px; background:url() right center no-repeat;}
+.vip-dingzhi .xuqiu-liu dd { font-size:14px;line-height:56px; color:#333; text-align:center; padding:0 75px 0 15px; background: url(./Images/vip-arr_1.png) right center no-repeat;}
 .vip-dingzhi .xuqiu-liu dd:first-child { padding-left:30px; }
 .vip-dingzhi .xuqiu-liu dd:last-child { padding-right:0; background:none;}
-.vip-dingzhi .vip-select { margin:20px auto; overflow:hidden;}
+.vip-dingzhi .vip-select { margin:10px auto; overflow:hidden;}
 .vip-dingzhi .vip-select > * { display:block; float:left;}
-.vip-dingzhi .vip-select select { width:210px; height:35px; padding-left:20px; line-height:35px; font-size:16px; border:1px #ddd solid; margin-right:10px;}
+.vip-dingzhi .vip-select select { width:130px; height:35px; padding-left:20px; line-height:35px; font-size:16px; border:1px #ddd solid; margin-right:10px;}
 .vip-dingzhi .vip-select span { font-size:16px; color:#beaf87; line-height:35px; font-weight:bold;}
-.vip-dingzhi .vip-xuqiu { height:120px; width:809px; margin-bottom:10px; padding:20px 30px; border:1px #ccc solid; background:url() no-repeat;}
+.vip-dingzhi .vip-xuqiu { height:160px; width:1085px; margin-bottom:10px; padding:20px 30px; border:1px #ccc solid; background-color: #beaf85;}
 .vip-dingzhi .vip-xuqiu dd { float:left;}
 .vip-dingzhi .vip-xuqiu dd input { float:left; height:35px; width:225px; margin-right:10px; margin-bottom:10px; padding:5px 5px 5px 90px; border:1px #eee solid; border-radius:3px;}
-.vip-dingzhi .vip-xuqiu dd input.vip-name { background:#fff url() 10px center no-repeat;}
+.vip-dingzhi .vip-xuqiu dd input.vip-name { background: #fff url(./Images/input-name-bg_1.png) 10px center no-repeat;}
 .vip-dingzhi .vip-xuqiu dd input.vip-tel { background:#fff url() 10px center no-repeat;}
-.vip-dingzhi .vip-xuqiu dd textarea { width:642px; height:35px; padding:20px 5px 5px 5px; border:1px #eee solid; border-radius:3px; float:left; background:#fff url() no-repeat;}
+.vip-dingzhi .vip-xuqiu dd textarea { width:642px; height:65px; padding:20px 5px 5px 5px; border:1px #eee solid; border-radius:3px; float:left; background:#fff url() no-repeat;}
 .vip-dingzhi .vip-xuqiu dt { float:right;}
 .vip-dingzhi .vip-xuqiu dt button { width:140px; height:120px; line-height:120px; color:#222; background:#fa0; border:none; border-radius:3px; font-size:26px; cursor:pointer;}
 .vip-dingzhi .vip-xuqiu dt button:hover { background:#fb0; color:#fff;}

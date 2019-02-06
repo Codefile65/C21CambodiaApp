@@ -13,6 +13,7 @@ import 'simple-line-icons/css/simple-line-icons.css';
 // Import Main styles for this application
 import  './scss/style.css'
 import home from './Projects/home'
+import homeid from './Projects/homeid'
 import Filter from './Projects/filter'
 import Detail from './Projects/detail'
 // Containers
@@ -28,14 +29,16 @@ class App extends Component {
       <HashRouter>
         <Switch>
 
-           <Route exact path="/home" name="HOME" component={home} />
+           <Route exact path="/home" name="HOME" component={homeid} />
+           <Route exact path="/login" name="Login Page" component={Login} />
            <Route exact path="/Search" name="Search" component={Filter} />
-           <Route exact path="/ID" name="Detail" component={Detail} />
-          <Route exact path="/login" name="Login Page" component={Login} />
-          <Route exact path="/register" name="Register Page" component={Register} />
+           <Route exact path="/register" name="Register Page" component={Register} />
+           <Route exact path="/:id" name="Detail" component={Detail} />
+         
+         
           <Route exact path="/404" name="Page 404" component={Page404} />
           <Route exact path="/500" name="Page 500" component={Page500} />
-          <Route path name="Home" component={DefaultLayout} />
+          <Route path name="/app" component={DefaultLayout} />
         </Switch>
       </HashRouter>
     );

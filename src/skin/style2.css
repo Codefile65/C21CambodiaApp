@@ -364,6 +364,19 @@
     background-color: #fafafa;
     margin-top:30px;
 }
+.searchicon3 {
+    width: 250px;
+    height: 40px;
+    margin: auto;
+    
+    font-size: inherit;
+    box-shadow:none;
+    border-radius: 30px;
+    -webkit-box-shadow:none;
+    border: 1.3px solid rgb(154, 154, 154);
+    background-color: #fafafa;
+    margin-top:-10px;
+}
 
 .searchicon span {
     background:url(./Images/search.png) no-repeat center center;
@@ -2066,7 +2079,7 @@ footer1{
     }
 
     .vip-dingzhi .vip-select {
-        margin: 20px auto;
+        margin: 10px auto;
         overflow: hidden;
     }
 
@@ -2098,6 +2111,7 @@ footer1{
         margin-bottom: 10px;
         padding: 20px 30px;
         width: 809px;
+       
     }
 
     .vip-dingzhi .vip-xuqiu dt {
@@ -2142,7 +2156,7 @@ footer1{
         border: 1px solid #eee;
         border-radius: 3px;
         float: left;
-        height: 35px;
+        height: 65px;
         padding: 20px 5px 5px;
         width: 642px;
     }

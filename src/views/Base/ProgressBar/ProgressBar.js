@@ -114,7 +114,7 @@ console.log("userData1", JSON.stringify(responseJson));
 
   render() {
     
-    if (this.state.redirect || sessionStorage.getItem('userData')||sessionStorage.getItem('userData3')) {
+    if (this.state.redirect || sessionStorage.getItem('userData')) {
       return (<Redirect to={'/base/paginations'}/>)
   }
   const responseWechat = (response) => {

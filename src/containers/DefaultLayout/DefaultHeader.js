@@ -35,7 +35,7 @@ handleLogout(){
 }
   render() {
     if(!sessionStorage.getItem('userData') || this.state.redirect){
-      return (<Redirect to={'/'}/>)
+      return (<Redirect to={'/login'}/>)
       
     }
     // eslint-disable-next-line

@@ -4,7 +4,7 @@ import throttle from 'lodash.throttle';
 import debounce from 'lodash.debounce';
 import ResizeObserver from 'resize-observer-polyfill';
 import PropTypes from 'prop-types';
-
+import imagenotavaiable from "./no_photo_available.gif";
 const screenChangeEvents = [
   'fullscreenchange',
   'MSFullscreenChange',
@@ -904,18 +904,20 @@ export default class ImageGallery extends React.Component {
               }
               <img
                 alt={item.originalAlt}
-                src={item.original}
+                src={item.image} 
+                onError={(e) => { e.target.onerror = null; e.target.src = imagenotavaiable }}
               />
             </picture>
           :
             <img
-              src={item.original}
+              src={item.image} 
+              onError={(e) => { e.target.onerror = null; e.target.src = imagenotavaiable }}
               alt={item.originalAlt}
               srcSet={item.srcSet}
               sizes={item.sizes}
               title={item.originalTitle}
               onLoad={this.props.onImageLoad}
-              onError={onImageError}
+             // onError={onImageError}
             />
         }
 
@@ -935,10 +937,11 @@ export default class ImageGallery extends React.Component {
     return (
       <div className='image-gallery-thumbnail-inner'>
         <img
-          src={item.thumbnail}
+          src={item.image} 
+          onError={(e) => { e.target.onerror = null; e.target.src = imagenotavaiable }}
           alt={item.thumbnailAlt}
           title={item.thumbnailTitle}
-          onError={onThumbnailError}
+          //onError={onThumbnailError}
         />
         {item.thumbnailLabel &&
           <div className='image-gallery-thumbnail-label'>

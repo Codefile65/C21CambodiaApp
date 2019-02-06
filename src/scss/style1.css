@@ -471,7 +471,7 @@ pre {
   @media (min-width: 1200px) {
     .container {
       max-width: 1140px; } }
-
+    
 .container-fluid {
   width: 100%;
   padding-right: 15px;
@@ -9885,3 +9885,4 @@ body {
 html body .app.flex-row.align-items-center {
   background-color:#efeff4;
   height: 100vh; }
+ 

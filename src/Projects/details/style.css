@@ -56,7 +56,7 @@
 .goods_fun{padding-top:10px;overflow:hidden;}
 .goods_fun span{display:inline-block;height:26px;line-height:26px; font-size:16px;}
 .goods_fun .fun_vs{
-	float:left;padding-left:25px;
+	float:left;padding-left:0px;
 height:34px;
 	/*background:url(../images/icon_20.png) no-repeat left center;*/
 	background:url(../Images/icon_20.png) no-repeat left bottom;
@@ -777,7 +777,7 @@ em{
 .huodonglist dl dd { width:283px; height:75px;  margin:5px; overflow:hidden;}
 .huodonglist dl dd a { display:block; float:left; text-align:center;}
 .huodonglist dl dd .hd-day { width:65px; height:65px; border-radius:10px; -webkit-border-radius: 10px;; border-radius:10px;; background:#777; color:#fff; font-size:14px; margin-right:10px;}
-.huodonglist dl dd .hd-day b { display:block; height:45px; width:65px; background:#f00; -moz-border-radius: 0px 0px 10px 10px;; -webkit-border-radius: 0px 0px 10px 10px;; border-radius:0px 0px 10px 10px;; line-height:45px; font-size:40px; }
+.huodonglist dl dd .hd-day b { display:block; height:45px; width:65px; background:#f00; -moz-border-radius: 0px 0px 10px 10px;; -webkit-border-radius: 0px 0px 10px 10px;; border-radius:0px 0px 10px 10px;; line-height:45px; font-size:14px; }
 .huodonglist dl dd .hd-title { font-size:12px; line-height:20px; margin-top:5px;}
 .huodonglist dl dd .hd-yuding { font-size:12px; line-height:20px; color:#f60; width:180px; font-weight:bold;}
 .huodonglist dl dd .hd-yuding:hover { color:#09f;}
@@ -801,7 +801,7 @@ em{
 	font-size:12px;
 }
 .baogao_form .input_text2{
-	height: 25px;
+	height: 30px;
 	width: 200px; border: 1px solid rgb(211, 211, 211);
 	font-size:14px;
 	line-height:25px;
@@ -944,7 +944,7 @@ em{
 .vip-dingzhi .vip-xuqiu dd input { float:left; height:35px; width:225px; margin-right:10px; margin-bottom:10px; padding:5px 5px 5px 90px; border:1px #eee solid; border-radius:3px;}
 .vip-dingzhi .vip-xuqiu dd input.vip-name { background:#fff url(../Images/input-name-bg_1.png) 10px center no-repeat;}
 .vip-dingzhi .vip-xuqiu dd input.vip-tel { background:#fff url(../Images/input-tel-bg_1.png) 10px center no-repeat;}
-.vip-dingzhi .vip-xuqiu dd textarea { width:642px; height:35px; padding:20px 5px 5px 5px; border:1px #eee solid; border-radius:3px; float:left; background:#fff url(../Images/input-xuqiu-bg_1.png) no-repeat;}
+.vip-dingzhi .vip-xuqiu dd textarea { width:642px; height:65px; padding:20px 5px 5px 5px; border:1px #eee solid; border-radius:3px; float:left; background:#fff url(../Images/input-xuqiu-bg_1.png) no-repeat;}
 .vip-dingzhi .vip-xuqiu dt { float:right;}
 .vip-dingzhi .vip-xuqiu dt button { width:140px; height:120px; line-height:120px; color:#222; background:#fa0; border:none; border-radius:3px; font-size:26px; cursor:pointer;}
 .vip-dingzhi .vip-xuqiu dt button:hover { background:#fb0; color:#fff;}

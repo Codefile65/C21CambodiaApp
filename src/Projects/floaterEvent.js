@@ -10,6 +10,7 @@ import "../skin/mini.css";
 import '../skin/scss/style.css';
 import Header from './header'
 import Flooter from './flooter'
+import superagent from 'superagent';
 //import { ReactSlackChat } from 'react-slack-chat';
 import { Tabs, Tab, TabPanel, TabList } from 'react-web-tabs';
 import Modal from 'react-awesome-modal'
@@ -62,6 +63,7 @@ class FloaterEvent extends Component {
     visible : false,
     editIdx: -1,
     columnToSort: "",
+    eventlist:[],
     sortDirection: "desc",
     count:10,
     openLeft: false,
@@ -99,7 +101,26 @@ closeModal() {
         visible : false
     });
 }
+componentDidMount() {
+  
+  
+  superagent
+  .get(`https://century21api.herokuapp.com/api/events`)
+  //  .set('Authorization', `Bearer ${this.getAuthenticationToken()}`)
+  // .set('Authorization', `Bearer ${localStorage.getItem('token')}`)
+  //.set('Authorization', 'Bearer perm: {this.getAuthenticationToken}
+ // .send({ country_id: sessionStorage.getItem("country_id"), project_type_id: sessionStorage.getItem("project_type_id"),end_price:sessionStorage.getItem("end_price"),rent_or_buy:sessionStorage.getItem("end_price"),room_amount:sessionStorage.getItem("room_amount"),sort:sessionStorage.getItem("sort"), start_price:sessionStorage.getItem("start_price"),title: sessionStorage.getItem("title") })
 
+  .end((err, res) => {
+      if (err) { this.setState({ errorMessage: 'Cannot retrieve data form server' }); return; }
+    
+       this.setState({
+           eventlist: res.body.result,
+           
+
+       });
+  });
+}
   setDrawerStyle = e => {
     e.preventDefault()
     this.setState({
@@ -134,13 +155,16 @@ closeModal() {
       
     return (
         <div class="listhothouse clear overflow mb20">
-        <h2 class="mb10"><span class="listh">推介项目</span></h2>
-        <dl>    <dd><a href="http://www.shitonghk.com/au/324.html"><img src="https://store.storeimages.cdn-apple.com/4981/as-images.apple.com/is/image/AppleInc/aos/published/images/a/pp/apple/products/apple-products-section1-one-holiday-201811?wid=2560&hei=1046&fmt=jpeg&qlt=95&op_usm=0.5,0.5&.v=1540576114151"/></a><a href="http://www.shitonghk.com/au/324.html">金边皇宫区公寓East One</a><span>面积：45 - 99平米价格：69.00 - 200.00万人民币</span></dd>
-                <dd><a href="http://www.shitonghk.com/au/279.html"><img src="https://store.storeimages.cdn-apple.com/4981/as-images.apple.com/is/image/AppleInc/aos/published/images/a/pp/apple/products/apple-products-section1-one-holiday-201811?wid=2560&hei=1046&fmt=jpeg&qlt=95&op_usm=0.5,0.5&.v=1540576114151"/></a><a href="http://www.shitonghk.com/au/279.html">金边“汤臣一品”-香格里拉公寓</a><span>面积：42 - 96平米 价格：60.00 - 135.00万人民币</span></dd>
-                <dd><a href="http://www.shitonghk.com/au/276.html"><img src="https://store.storeimages.cdn-apple.com/4981/as-images.apple.com/is/image/AppleInc/aos/published/images/a/pp/apple/products/apple-products-section1-one-holiday-201811?wid=2560&hei=1046&fmt=jpeg&qlt=95&op_usm=0.5,0.5&.v=1540576114151"/></a><a href="http://www.shitonghk.com/au/276.html">吉隆坡市中心丽阳豪庭—The Residences</a><span>面积：66 - 277平米 价格：289.00 - 440.00万人民币</span></dd>
-                <dd><a href="http://www.shitonghk.com/au/277.html"><img src="https://store.storeimages.cdn-apple.com/4981/as-images.apple.com/is/image/AppleInc/aos/published/images/a/pp/apple/products/apple-products-section1-one-holiday-201811?wid=2560&hei=1046&fmt=jpeg&qlt=95&op_usm=0.5,0.5&.v=1540576114151"/></a><a href="http://www.shitonghk.com/au/277.html">吉隆坡双子塔豪景园—Eaton</a><span>面积：59 - 172平米
-            价格：118.00 - 177.00万人民币</span></dd>
-              </dl>
+         <h2 class="mb10"><span class="listh">Lastest Event</span></h2>
+       {  this.state.eventlist
+         .filter((todo, index) => (index < 4))
+       .map((todo) => {
+    
+    return(
+    <dl>    <dd><a href="http://www.shitonghk.com/au/324.html"><img src={todo.banner}/></a><a href="http://www.shitonghk.com/au/324.html">{todo.title}</a><span>Description：{todo.description}</span></dd>
+               </dl>
+          );
+        })}
       </div>
 
 );
